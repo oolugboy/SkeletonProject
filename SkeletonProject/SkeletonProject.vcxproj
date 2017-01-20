@@ -117,8 +117,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="dragon.skel" />
     <None Include="packages.config" />
+    <None Include="shader.frag" />
+    <None Include="shader.vert" />
     <None Include="test.skel" />
+    <None Include="wasp.skel" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BallJoint.cpp" />

@@ -36,14 +36,11 @@ public:
 	static void mouse_button_callback(GLFWwindow * window, int button, int action, int mods);
 	static void cursor_pos_callback(GLFWwindow * window, double xPos, double yPos);
 	static void scroll_callback(GLFWwindow * window, double xOffset, double yOffset);
-	static GLint shaderProgram2; // The seperate shader for the geometries
-	static GLint agentShaderProgram;
+	static GLint shaderProgram; // The seperate shader for the geometries
 	static glm::vec3 cam_pos;		// e  | Position of camera
 	static glm::vec3 cam_look_at;	// d  | This is where the camera looks at
 	static glm::vec3 cam_up;			// up | What orientation "up" is	
 	static Camera * camera;
-	static glm::vec3 lightSourcePos;	
-	//Scene * scene;
-	static int isTexture;
+	static glm::vec3 lightSourcePos;		
 };
 #endif

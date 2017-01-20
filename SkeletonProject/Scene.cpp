@@ -6,16 +6,33 @@ Scene::Scene()
 {
 	cout << " About to create the skeleton " << endl;
 	test = new Skeleton("test.skel");
+	dragon = new Skeleton("dragon.skel");
+	wasp = new Skeleton("wasp.skel");
 }
 
-void Scene::draw()
+void Scene::drawTest(GLint shaderProgram)
 {
-
+	glUseProgram(shaderProgram);
+	test->draw();
 }
+void Scene::drawDragon(GLint shaderProgram)
+{
+	glUseProgram(shaderProgram);
+	dragon->draw();
+}
+void Scene::drawWasp(GLint shaderProgram)
+{
+	glUseProgram(shaderProgram);
+	wasp->draw();
+}
+
+
 
 void Scene::update()
 {
-
+	test->update();
+	wasp->update();
+	dragon->update();
 }
 
 void Scene::mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height)

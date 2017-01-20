@@ -1,7 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
-#define MAXDEGREE -100000
+#define MAXDEGREE 100000
 class DOF
 {
 public:

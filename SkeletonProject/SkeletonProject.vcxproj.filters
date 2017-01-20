@@ -17,6 +17,10 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="test.skel" />
+    <None Include="shader.vert" />
+    <None Include="shader.frag" />
+    <None Include="wasp.skel" />
+    <None Include="dragon.skel" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BallJoint.cpp">

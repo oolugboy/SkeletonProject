@@ -4,43 +4,6 @@ BallJoint::BallJoint()
 {
 	dof = new DOF();
 	offset = glm::vec3(0.0f, 0.0f, 0.0f);
-	vertices.resize(36);
-	vertices[0] = glm::vec3(boxMin.x, boxMin.y, boxMin.z);// triangle 1 : begin
-	vertices[1] = glm::vec3(boxMin.x, boxMin.y, boxMax.z);
-	vertices[2] = glm::vec3(boxMin.x, boxMax.y, boxMax.z); // triangle 1 : end
-	vertices[3] = glm::vec3(boxMax.x, boxMax.y, boxMin.z); // triangle 2 : begin
-	vertices[4] = glm::vec3(boxMin.x, boxMin.y, boxMin.z);
-	vertices[5] = glm::vec3(boxMin.x, boxMax.y, boxMin.z); // triangle 2 : end
-	vertices[6] = glm::vec3(boxMax.x, boxMin.y, boxMax.z);
-	vertices[7] = glm::vec3(boxMin.x, boxMin.y, boxMin.z);
-	vertices[8] = glm::vec3(boxMax.x, boxMin.y, boxMin.z);
-	vertices[9] = glm::vec3(boxMax.x, boxMax.y, boxMin.z);
-	vertices[10] = glm::vec3(boxMax.x, boxMin.y, boxMin.z);
-	vertices[11] = glm::vec3(boxMin.x, boxMin.y, boxMin.z);
-	vertices[12] = glm::vec3(boxMin.x, boxMin.y, boxMin.z);
-	vertices[13] = glm::vec3(boxMin.x, boxMax.y, boxMax.z);
-	vertices[14] = glm::vec3(boxMin.x, boxMax.y, boxMin.z);
-	vertices[15] = glm::vec3(boxMax.x, boxMin.y, boxMax.z);
-	vertices[16] = glm::vec3(boxMin.x, boxMin.y, boxMax.z);
-	vertices[17] = glm::vec3(boxMin.x, boxMin.y, boxMin.z);
-	vertices[18] = glm::vec3(boxMin.x, boxMax.y, boxMax.z);
-	vertices[19] = glm::vec3(boxMin.x, boxMin.y, boxMax.z);
-	vertices[20] = glm::vec3(boxMax.x, boxMin.y, boxMax.z);
-	vertices[21] = glm::vec3(boxMax.x, boxMax.y, boxMax.z);
-	vertices[22] = glm::vec3(boxMax.x, boxMin.y, boxMin.z);
-	vertices[23] = glm::vec3(boxMax.x, boxMax.y, boxMin.z);
-	vertices[24] = glm::vec3(boxMax.x, boxMin.y, boxMin.z);
-	vertices[25] = glm::vec3(boxMax.x, boxMax.y, boxMax.z);
-	vertices[26] = glm::vec3(boxMax.x, boxMin.y, boxMax.z);
-	vertices[27] = glm::vec3(boxMax.x, boxMax.y, boxMax.z);
-	vertices[28] = glm::vec3(boxMax.x, boxMax.y, boxMin.z);
-	vertices[29] = glm::vec3(boxMin.x, boxMax.y, boxMin.z);
-	vertices[30] = glm::vec3(boxMax.x, boxMax.y, boxMax.z);
-	vertices[31] = glm::vec3(boxMin.x, boxMax.y, boxMin.z);
-	vertices[32] = glm::vec3(boxMin.x, boxMax.y, boxMax.z);
-	vertices[33] = glm::vec3(boxMax.x, boxMax.y, boxMax.z);
-	vertices[34] = glm::vec3(boxMin.x, boxMax.y, boxMax.z);
-	vertices[35] = glm::vec3(boxMax.x, boxMin.y, boxMax.z);
 }
 bool BallJoint::load(Tokenizer * token)
 {
@@ -89,7 +52,9 @@ bool BallJoint::load(Tokenizer * token)
 			dof->pose.x = token->GetFloat();
 			dof->pose.y = token->GetFloat();
 			dof->pose.z = token->GetFloat();
+			cout << " The pose.z before " << dof->pose.z << endl;
 			dof->clamp(dof->pose);
+			cout << " The pose.z after " << dof->pose.z << endl;
 		}
 		else if (strcmp(temp, "balljoint") == 0)
 		{
@@ -102,6 +67,9 @@ bool BallJoint::load(Tokenizer * token)
 		else if (strcmp(temp, "}") == 0)
 		{
 			//cout << " In the close condition " << endl;
+			// Done parsing file, now to load the vertices
+			genVertices();
+			loadVertices();
 			return true;
 		}
 		else //unrecognized token
@@ -111,27 +79,32 @@ bool BallJoint::load(Tokenizer * token)
 	}
 	return false;
 }
-void BallJoint::update(glm::vec3 parentPos)
+void BallJoint::update(glm::mat4 parentMat)
 {	
-	currPos = parentPos + offset;
-	toWorld = glm::translate(glm::mat4(1.0f), currPos);
+	glm::mat4 trans = glm::translate(glm::mat4(1.0f), offset);
+	
 	//The DOF angles are in degrees
-	float deg = dof->pose.x * (180.0f / PI);
-	toWorld = toWorld * glm::rotate(glm::mat4(1.0f), deg, glm::vec3(1.0f, 0.0f, 0.0f));
+	float deg = dof->pose.x;
+	glm::mat4 rotX = glm::rotate(glm::mat4(1.0f), deg, glm::vec3(1.0f, 0.0f, 0.0f));
 
-	deg = dof->pose.y * (180.0f / PI);
-	toWorld = toWorld * glm::rotate(glm::mat4(1.0f), deg, glm::vec3(0.0f, 1.0f, 0.0f));
+	deg = dof->pose.y;
+	glm::mat4 rotY = glm::rotate(glm::mat4(1.0f), deg, glm::vec3(0.0f, 1.0f, 0.0f));
 
-	deg = dof->pose.z * (180.0f / PI);
-	toWorld = toWorld * glm::rotate(glm::mat4(1.0f), deg, glm::vec3(0.0f, 0.0f, 1.0f));	
+	deg = dof->pose.z;
+	glm::mat4 rotZ = glm::rotate(glm::mat4(1.0f), deg, glm::vec3(0.0f, 0.0f, 1.0f));		
+
+	glm::mat4 locMatrix = trans * rotZ * rotY * rotX;
+	toWorld = parentMat * locMatrix;
 
 	int size = children.size();
 	for (int i = 0; i < size; i++)
 	{
-		children[i]->update(currPos);
+		children[i]->update(toWorld);
 	}
 }
 BallJoint::~BallJoint()
 {
-
+	glDeleteBuffers(1, &VBO);
+	glDeleteVertexArrays(1, &VAO);	
+	delete(dof);
 }

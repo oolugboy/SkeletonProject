@@ -6,6 +6,8 @@ class Skeleton
 public:
 	Skeleton(const char * fileName);
 	~Skeleton();
+	void update();
+	void draw();
 	bool parseLoad();
 	Joint * root;
 	char fileName[BUFSIZ];

@@ -7,6 +7,14 @@ Skeleton::Skeleton(const char * fileName)
 	strcpy(this->fileName, fileName);
 	parseLoad();
 }
+void Skeleton::update()
+{
+	root->update(glm::mat4(1.0f));
+}
+void Skeleton::draw()
+{
+	root->draw();
+}
 bool Skeleton::parseLoad()
 {
 	Tokenizer * token = new Tokenizer();

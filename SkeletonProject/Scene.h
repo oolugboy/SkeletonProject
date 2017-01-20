@@ -28,11 +28,17 @@ public:
 	GLint m_shaderProgram2;
 	Scene();
 
-	void draw();
+	void drawTest(GLint shaderProgram);
+	void drawWasp(GLint shaderProgram);
+	void drawDragon(GLint shaderProgram);
+	
 	void update();
 	~Scene();
 
+	Skeleton * dragon;
+	Skeleton * wasp;
 	Skeleton * test;
+	Skeleton *curr;
 	void mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height);
 	glm::vec3 trackBallMapping(glm::vec3 point, int width, int height);
 

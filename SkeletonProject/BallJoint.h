@@ -9,7 +9,7 @@ public:
 	BallJoint();
 	~BallJoint();
 	bool load(Tokenizer * token);
-	void update(glm::vec3 parentPos);
+	void update(glm::mat4 parentMat);
 	DOF * dof;
 };
 

@@ -9,48 +9,41 @@ bool leftButton = false, rightButton = false;
 float scrollOffset = 0.0f;
 glm::vec3 currPos(0.0f, 0.0f, 0.0f);
 glm::vec3 lastPos(0.0f, 0.0f, 0.0f);
-bool accelerate = false;
-bool turnRight = false;
-bool turnLeft = false;
+bool test = true;
+bool dragon = false;
+bool wasp = false;
 
 Scene * scene;
 
 // On some systems you need to change this to the absolute path
-#define VERTEX_SHADER_PATH "../shader.vert"
-#define FRAGMENT_SHADER_PATH "../shader.frag"
-#define VERTEX_SHADER2_PATH "../shader2.vert"
-#define FRAGMENT_SHADER2_PATH "../shader2.frag"
-#define AGENT_VERTEX_SHADER_PATH "shaders/agentShader.vert"
-#define AGENT_FRAGMENT_SHADER_PATH "shaders/agentShader.frag"
-
+#define VERTEX_SHADER_PATH "shader.vert"
+#define FRAGMENT_SHADER_PATH "shader.frag"
 
 Camera * Window::camera;
 // Default camera parameters
-glm::vec3 Window::cam_pos(0.0f, 5.0f, 15.0f);		// e  | Position of camera
+glm::vec3 Window::cam_pos(0.0f, 0.0f, 5.0f);		// e  | Position of camera
 glm::vec3 Window::cam_look_at(0.0f, 0.0f, 0.0f);	// d  | This is where the camera looks at
 glm::vec3 Window::cam_up(0.0f, 1.0f, 0.0f);			// up | What orientation "up" is
 
 int Window::width;
 int Window::height;
-int Window::isTexture = 1;
+
 bool Window::debug = true;
 
 glm::mat4 Window::P;
 glm::mat4 Window::V;
-GLint Window::shaderProgram2;
-GLint Window::agentShaderProgram;
-
-int camera_mode = 0;
-
+GLint Window::shaderProgram;
 
 void Window::initialize_objects()
 {
 	// Load the shader program. Make sure you have the correct filepath up top
+	shaderProgram = LoadShaders(VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH);
 
 	/* Initialize the scene */
 	scene = new Scene();
 	/*Set the initial projection matrix */
 	P = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 1000.0f);
+
 }
 
 // Treat this as a destructor function. Delete dynamically allocated memory here.
@@ -118,7 +111,6 @@ void Window::resize_callback(GLFWwindow* window, int width, int height)
 	{
 		cout << " The projection is being set " << endl;
 		P = glm::perspective(45.0f, (float)width / (float)height, 0.1f, 1000.0f);
-		//V = glm::lookAt(cam_pos, cam_look_at, cam_up);
 	}
 }
 
@@ -129,10 +121,25 @@ void Window::idle_callback()
 
 void Window::display_callback(GLFWwindow* window)
 {
+	//Update the view matrix
+	V = glm::lookAt(cam_pos, cam_look_at, cam_up);
 	//Make the scene initially red 
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 	// Clear the color and depth buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	scene->update();
+	if (test)
+		scene->drawTest(shaderProgram);
+	else if (dragon)
+		scene->drawDragon(shaderProgram);
+	else
+		scene->drawWasp(shaderProgram);
+
+	if (leftButton)
+	{
+		scene->mouseOrbit(lastPos, currPos, cam_pos, width, height);
+	}
 
 	// Gets events, including input such as keyboard and mouse or window resizing
 	glfwPollEvents();
@@ -148,6 +155,25 @@ void Window::key_callback(GLFWwindow* window, int key, int scancode, int action,
 		// Close the window. This causes the program to also terminate.
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}	
+	if (action == GLFW_PRESS && key == GLFW_KEY_T) 
+	{
+		test = true;
+		dragon = wasp = false;
+		cam_pos = glm::vec3(0, 0, 5.0f);
+	}
+	if (action == GLFW_PRESS && key == GLFW_KEY_D) 
+	{
+		dragon = true;
+		wasp = test = false;
+		cam_pos = glm::vec3(0, 0, 40.0f);
+	}
+	if (action == GLFW_PRESS && key == GLFW_KEY_W)
+	{
+		wasp = true;
+		test = dragon = false;
+		cam_pos = glm::vec3(0, 0, 5.0f);
+	}
+
 }
 void Window::mouse_button_callback(GLFWwindow * window, int button, int action, int mods)
 {
