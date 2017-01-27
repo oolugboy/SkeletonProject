@@ -8,6 +8,7 @@ Scene::Scene()
 	test = new Skeleton("test.skel");
 	dragon = new Skeleton("dragon.skel");
 	wasp = new Skeleton("wasp.skel");
+	triangleSkin = new Skin("triangle.skin");
 }
 
 void Scene::drawTest(GLint shaderProgram)
@@ -25,8 +26,6 @@ void Scene::drawWasp(GLint shaderProgram)
 	glUseProgram(shaderProgram);
 	wasp->draw();
 }
-
-
 
 void Scene::update()
 {

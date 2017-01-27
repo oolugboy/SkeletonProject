@@ -122,6 +122,9 @@
     <None Include="shader.frag" />
     <None Include="shader.vert" />
     <None Include="test.skel" />
+    <None Include="triangle.skin" />
+    <None Include="tube.skel" />
+    <None Include="tube.skin" />
     <None Include="wasp.skel" />
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +136,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skeleton.cpp" />
+    <ClCompile Include="Skin.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -145,6 +149,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skeleton.h" />
+    <ClInclude Include="Skin.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

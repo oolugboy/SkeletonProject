@@ -21,6 +21,9 @@
     <None Include="shader.frag" />
     <None Include="wasp.skel" />
     <None Include="dragon.skel" />
+    <None Include="tube.skel" />
+    <None Include="tube.skin" />
+    <None Include="triangle.skin" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BallJoint.cpp">
@@ -53,6 +56,9 @@
     <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Skin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BallJoint.h">
@@ -83,6 +89,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Skin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

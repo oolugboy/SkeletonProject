@@ -12,5 +12,4 @@ public:
 	Joint * root;
 	char fileName[BUFSIZ];
 };
-
 #endif

@@ -19,6 +19,7 @@
 #include <limits>
 #include <string>
 #include "Skeleton.h"
+#include "Skin.h"
 
 
 class Scene
@@ -39,8 +40,8 @@ public:
 	Skeleton * wasp;
 	Skeleton * test;
 	Skeleton *curr;
+	Skin * triangleSkin;
 	void mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height);
 	glm::vec3 trackBallMapping(glm::vec3 point, int width, int height);
-
 };
 #endif

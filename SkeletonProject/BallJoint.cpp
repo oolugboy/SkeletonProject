@@ -7,7 +7,6 @@ BallJoint::BallJoint()
 }
 bool BallJoint::load(Tokenizer * token)
 {
-	cout << " In the join load " << endl;
 	token->FindToken("{");
 	while(true)
 	{
@@ -52,16 +51,12 @@ bool BallJoint::load(Tokenizer * token)
 			dof->pose.x = token->GetFloat();
 			dof->pose.y = token->GetFloat();
 			dof->pose.z = token->GetFloat();
-			cout << " The pose.z before " << dof->pose.z << endl;
 			dof->clamp(dof->pose);
-			cout << " The pose.z after " << dof->pose.z << endl;
 		}
 		else if (strcmp(temp, "balljoint") == 0)
 		{
-			Joint * child = new BallJoint();
-			cout << " About to load a child " << endl;
+			Joint * child = new BallJoint();	
 			child->load(token);
-			cout << " Done loading the child " << endl;
 			children.push_back(child);
 		}
 		else if (strcmp(temp, "}") == 0)

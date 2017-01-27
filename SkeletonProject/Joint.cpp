@@ -18,7 +18,7 @@ void Joint::loadVertices()
 	// Now bind a VBO to it as a GL_ARRAY_BUFFER. The GL_ARRAY_BUFFER is an array containing relevant data to what
 	// you want to draw, such as vertices, normals, colors, etc.
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	cout << " The size of the vertices is " << vertices.size() << endl;
+	//cout << " The size of the vertices is " << vertices.size() << endl;
 	// glBufferData populates the most recently bound buffer with data starting at the 3rd argument and ending after
 	// the 2nd argument number of indices. How does OpenGL know how long an index spans? Go to glVertexAttribPointer.
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &(vertices[0]), GL_STATIC_DRAW);
