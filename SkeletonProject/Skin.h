@@ -5,6 +5,8 @@
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include "Skeleton.h"
+
 #define PI 3.14159265358979f
 
 using namespace std;
@@ -12,14 +14,15 @@ using namespace std;
 class Skin
 {
 public:
-	Skin(const char * filename);
+	Skin(const char * filename, Joint * root);
 	~Skin();
 	Tokenizer * token;
 	bool load();
-	void update(glm::mat4 parentMat);
-	void draw();
+	void update();
+	void draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection);
 	void loadVertices();
-	void genVertices();	
+	void getDeformedVertsAndNorms();	
+	Joint * root;
 	vector< glm::vec3 > vertices;
 	vector < glm::vec3 > normals;
 	vector< vector < pair<int , float> > >jointWeightMap;

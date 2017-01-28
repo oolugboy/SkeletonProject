@@ -3,7 +3,7 @@
 Skeleton::Skeleton(const char * fileName)
 {
 	//* Assume that the root must always be a ball joint 
-	root = new BallJoint();
+	root = new BallJoint(Joint::idCounter++);
 	strcpy(this->fileName, fileName);
 	parseLoad();
 }
@@ -14,6 +14,11 @@ void Skeleton::update()
 void Skeleton::draw()
 {
 	root->draw();
+}
+glm::mat4 Skeleton::getWorldMatrix(Joint * root, int id)
+{
+	pair<bool, glm::mat4 > res = root->findWorldMatrix(id);
+	return res.second;
 }
 bool Skeleton::parseLoad()
 {

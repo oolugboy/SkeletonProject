@@ -1,9 +1,10 @@
 #include "Joint.h"
 #include "Window.h"
 
+int Joint::idCounter;
 Joint::Joint()
 {
-
+	
 }
 void Joint::loadVertices()
 {
@@ -55,8 +56,7 @@ void Joint::render()
 
 	/*For the wired */
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	// Tell OpenGL to draw with triangles, using 36 indices, the type of the indices, and the offset to start from
+		
 	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	// Unbind the VAO when we're done so we don't accidentally draw extra stuff or tamper with its bound buffers
@@ -73,6 +73,21 @@ void Joint::draw()
 	{
 		children[i]->draw();
 	}
+}
+pair<bool, glm::mat4> Joint::findWorldMatrix(int id)
+{
+	if (this->id == id)
+	{
+		return make_pair(true, toWorld);
+	}
+	int size = children.size();
+	for (int i = 0; i < size; i++)
+	{
+		pair<bool, glm::mat4> res = children[i]->findWorldMatrix(id);
+		if (res.first)
+			return res;
+	}
+	return make_pair(false, glm::mat4(1.0f));
 }
 void Joint::genVertices()
 {

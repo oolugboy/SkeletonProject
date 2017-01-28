@@ -129,12 +129,13 @@ void Window::display_callback(GLFWwindow* window)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	scene->update();
-	if (test)
+	scene->drawTest(shaderProgram, V, P);
+	/*if (test)
 		scene->drawTest(shaderProgram);
 	else if (dragon)
 		scene->drawDragon(shaderProgram);
 	else
-		scene->drawWasp(shaderProgram);
+		scene->drawWasp(shaderProgram); */
 
 	if (leftButton)
 	{

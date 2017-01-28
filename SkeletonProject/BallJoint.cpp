@@ -1,7 +1,8 @@
 #include "BallJoint.h"
 
-BallJoint::BallJoint()
+BallJoint::BallJoint(int id)
 {
+	this->id = id;
 	dof = new DOF();
 	offset = glm::vec3(0.0f, 0.0f, 0.0f);
 }
@@ -55,7 +56,7 @@ bool BallJoint::load(Tokenizer * token)
 		}
 		else if (strcmp(temp, "balljoint") == 0)
 		{
-			Joint * child = new BallJoint();	
+			Joint * child = new BallJoint(idCounter++);	
 			child->load(token);
 			children.push_back(child);
 		}

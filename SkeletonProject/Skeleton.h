@@ -9,6 +9,7 @@ public:
 	void update();
 	void draw();
 	bool parseLoad();
+	static glm::mat4 getWorldMatrix(Joint * root, int id);
 	Joint * root;
 	char fileName[BUFSIZ];
 };

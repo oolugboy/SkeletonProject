@@ -2,19 +2,23 @@
 
 using namespace std;
 
+
 Scene::Scene()
 {
 	cout << " About to create the skeleton " << endl;
 	test = new Skeleton("test.skel");
 	dragon = new Skeleton("dragon.skel");
-	wasp = new Skeleton("wasp.skel");
-	triangleSkin = new Skin("triangle.skin");
+	wasp = new Skeleton("wasp.skel");		
+	tube = new Skeleton("tube.skel");
+	tubeSkin = new Skin("tube.skin", tube->root);
 }
 
-void Scene::drawTest(GLint shaderProgram)
+void Scene::drawTest(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 {
 	glUseProgram(shaderProgram);
-	test->draw();
+	//test->draw();
+	//tube->draw();
+	tubeSkin->draw(shaderProgram, view, projection);
 }
 void Scene::drawDragon(GLint shaderProgram)
 {
@@ -32,6 +36,8 @@ void Scene::update()
 	test->update();
 	wasp->update();
 	dragon->update();
+	tube->update();
+	tubeSkin->update();
 }
 
 void Scene::mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height)

@@ -29,7 +29,7 @@ public:
 	GLint m_shaderProgram2;
 	Scene();
 
-	void drawTest(GLint shaderProgram);
+	void drawTest(GLint shaderProgram, glm::mat4 view, glm::mat4 projection);
 	void drawWasp(GLint shaderProgram);
 	void drawDragon(GLint shaderProgram);
 	
@@ -39,8 +39,10 @@ public:
 	Skeleton * dragon;
 	Skeleton * wasp;
 	Skeleton * test;
-	Skeleton *curr;
+	Skeleton * tube;
+	
 	Skin * triangleSkin;
+	Skin * tubeSkin;
 	void mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height);
 	glm::vec3 trackBallMapping(glm::vec3 point, int width, int height);
 };

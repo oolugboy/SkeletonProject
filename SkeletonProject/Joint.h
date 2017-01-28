@@ -12,6 +12,8 @@ using namespace std;
 class Joint
 {
 	public:
+		int id;
+		static int idCounter;
 		Joint();
 		virtual ~Joint();
 		vector < Joint * > children;
@@ -19,6 +21,7 @@ class Joint
 		glm::vec3 boxMax;
 		virtual bool load(Tokenizer * token) = 0;
 		virtual void update(glm::mat4 parentMat) = 0;
+		pair< bool , glm::mat4> findWorldMatrix(int id);
 		void draw();
 		void loadVertices();
 		void genVertices();
