@@ -2,10 +2,22 @@
 #include "Token.h"
 Skeleton::Skeleton(const char * fileName)
 {
+	/* Reset the id counter*/
+	Joint::idCounter = 0;
 	//* Assume that the root must always be a ball joint 
 	root = new BallJoint(Joint::idCounter++);
 	strcpy(this->fileName, fileName);
 	parseLoad();
+	numJoints = Joint::idCounter;
+	currJointId = 0;
+}
+void Skeleton::bindNextJoint()
+{
+	currJointId = (currJointId + 1) % numJoints;
+}
+void Skeleton::adjustPos(glm::vec3 axis, bool incr)
+{
+	root->adjustPos(axis, incr, currJointId);
 }
 void Skeleton::update()
 {

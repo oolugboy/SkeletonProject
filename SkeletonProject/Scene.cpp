@@ -8,7 +8,10 @@ Scene::Scene()
 	cout << " About to create the skeleton " << endl;
 	test = new Skeleton("test.skel");
 	dragon = new Skeleton("dragon.skel");
-	wasp = new Skeleton("wasp.skel");		
+
+	currSkel = wasp = new Skeleton("wasp.skel");
+	currSkin = waspSkin = new Skin("wasp.skin", wasp->root);
+
 	tube = new Skeleton("tube.skel");
 	tubeSkin = new Skin("tube.skin", tube->root);
 }
@@ -18,7 +21,8 @@ void Scene::drawTest(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 	glUseProgram(shaderProgram);
 	//test->draw();
 	//tube->draw();
-	tubeSkin->draw(shaderProgram, view, projection);
+	//tubeSkin->draw(shaderProgram, view, projection);
+	currSkin->draw(shaderProgram, view, projection);
 }
 void Scene::drawDragon(GLint shaderProgram)
 {
@@ -30,14 +34,18 @@ void Scene::drawWasp(GLint shaderProgram)
 	glUseProgram(shaderProgram);
 	wasp->draw();
 }
-
+void Scene::bindNextJoint()
+{
+	currSkel->bindNextJoint();
+}
+void Scene::adjustPos(glm::vec3 axis, bool incr)
+{
+	currSkel->adjustPos(axis, incr);
+}
 void Scene::update()
 {
-	test->update();
-	wasp->update();
-	dragon->update();
-	tube->update();
-	tubeSkin->update();
+	currSkel->update();
+	currSkin->update();
 }
 
 void Scene::mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height)

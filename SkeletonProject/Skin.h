@@ -23,7 +23,10 @@ public:
 	void loadVertices();
 	void getDeformedVertsAndNorms();	
 	Joint * root;
+	int numVertices;
+	vector< glm::vec3 > initVertices;
 	vector< glm::vec3 > vertices;
+	vector< glm::vec3 > initNormals;
 	vector < glm::vec3 > normals;
 	vector< vector < pair<int , float> > >jointWeightMap;
 	vector < int > indices;

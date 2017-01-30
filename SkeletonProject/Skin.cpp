@@ -7,6 +7,10 @@ Skin::Skin(const char * filename, Joint * root)
 	toWorld = glm::mat4(1.0f);
 	/* load the file */
 	load();
+	numVertices = initVertices.size();
+	vertices.resize(numVertices);
+	normals.resize(numVertices);
+
 	// Create array object and buffers. Remember to delete your buffers when the object is destroyed!
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -25,7 +29,7 @@ void Skin::loadVertices()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	// glBufferData populates the most recently bound buffer with data starting at the 3rd argument and ending after
 	// the 2nd argument number of indices. How does OpenGL know how long an index spans? Go to glVertexAttribPointer.
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &(vertices[0]), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * numVertices, &(vertices[0]), GL_STATIC_DRAW);
 	// Enable the usage of layout location 0 (check the vertex shader to see what this is)
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0,// This first parameter x should be the same as the number passed into the line "layout (location = x)" in the vertex shader. In this case, it's 0. Valid values are 0 to GL_MAX_UNIFORM_LOCATIONS.
@@ -37,7 +41,7 @@ void Skin::loadVertices()
 
 					 /* Now to load the normals */
 	glBindBuffer(GL_ARRAY_BUFFER, NBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(normals[0]) * normals.size(), &(normals[0]), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(normals[0]) * numVertices, &(normals[0]), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 
@@ -72,7 +76,7 @@ bool Skin::load()
 				newPos.y = token->GetFloat();
 				newPos.z = token->GetFloat();
 
-				vertices.push_back(newPos);
+				initVertices.push_back(newPos);
 			}
 			token->FindToken("}");
 		}
@@ -87,7 +91,7 @@ bool Skin::load()
 				newNorm.y = token->GetFloat();
 				newNorm.z = token->GetFloat();
 				
-				normals.push_back(newNorm);
+				initNormals.push_back(newNorm);
 			}
 			token->FindToken("}");
 		}
@@ -158,7 +162,7 @@ bool Skin::load()
 void Skin::update()
 {
 	/* First update the deformed vertices */
-	//getDeformedVertsAndNorms();
+	getDeformedVertsAndNorms();
 	/* Then load the vertices */
 	loadVertices();
 }
@@ -188,9 +192,8 @@ void Skin::draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 }
 void Skin::getDeformedVertsAndNorms()
 {
-	// Go through all the vertices and normals
-	int size = vertices.size();
-	for (int i = 0; i < size; i++)
+	// Go through all the vertices and normals	
+	for (int i = 0; i < numVertices; i++)
 	{
 		glm::vec3 newVert = glm::vec3(0, 0, 0);
 		glm::vec3 newNorm = glm::vec3(0, 0, 0);
@@ -198,18 +201,18 @@ void Skin::getDeformedVertsAndNorms()
 		int mSize = jointWeightMap[i].size();
 		for (int k = 0; k < mSize; k++)
 		{
-			float weight = jointWeightMap[i][k].second;
 			float jointInd = jointWeightMap[i][k].first;
+			float weight = jointWeightMap[i][k].second;			
 
 			glm::mat4 world = Skeleton::getWorldMatrix(this->root, jointInd);
 			glm::mat4 bindingInv = glm::inverse(bindingMatrices[jointInd]);
 
 			/* Sum of for the vertices */
-			glm::vec3 vertAdd = weight * world * bindingInv * glm::vec4(vertices[i], 1.0f);
+			glm::vec3 vertAdd = weight * world * bindingInv * glm::vec4(initVertices[i], 1.0f);
 			newVert = newVert + vertAdd;
 
 			/* Sum up for the normals */
-			glm::vec3 normAdd = weight * world * bindingInv * glm::vec4(normals[i], 0.0f);
+			glm::vec3 normAdd = weight * world * bindingInv * glm::vec4(initNormals[i], 0.0f);
 			newNorm = newNorm + normAdd;
 		}
 		vertices[i] = newVert;

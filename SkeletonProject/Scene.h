@@ -36,14 +36,28 @@ public:
 	void update();
 	~Scene();
 
+	/* The currently bound skeleton */
+	Skeleton * currSkel;
+	Skin * currSkin;
+
+	/* Skeletons*/
 	Skeleton * dragon;
 	Skeleton * wasp;
 	Skeleton * test;
 	Skeleton * tube;
 	
+	/* Skins */
 	Skin * triangleSkin;
+	Skin * waspSkin;
 	Skin * tubeSkin;
+
+	void bindNextJoint();
+	void adjustPos(glm::vec3 axis, bool incr);
 	void mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height);
 	glm::vec3 trackBallMapping(glm::vec3 point, int width, int height);
+
+	/* The lighting specifications */
+	glm::vec3 lightPos1;
+	glm::vec3 lightPos2;
 };
 #endif

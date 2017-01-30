@@ -5,6 +5,7 @@ BallJoint::BallJoint(int id)
 	this->id = id;
 	dof = new DOF();
 	offset = glm::vec3(0.0f, 0.0f, 0.0f);
+	toWorld = glm::mat4(1.0f);
 }
 bool BallJoint::load(Tokenizer * token)
 {
@@ -90,8 +91,9 @@ void BallJoint::update(glm::mat4 parentMat)
 	glm::mat4 rotZ = glm::rotate(glm::mat4(1.0f), deg, glm::vec3(0.0f, 0.0f, 1.0f));		
 
 	glm::mat4 locMatrix = trans * rotZ * rotY * rotX;
-	toWorld = parentMat * locMatrix;
-
+	toWorld = parentMat * locMatrix; 
+	/*cout << " The current joint is " << this->id << endl;
+	printMatrix(toWorld);*/
 	int size = children.size();
 	for (int i = 0; i < size; i++)
 	{

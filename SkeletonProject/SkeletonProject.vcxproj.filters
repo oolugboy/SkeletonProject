@@ -24,6 +24,7 @@
     <None Include="tube.skel" />
     <None Include="tube.skin" />
     <None Include="triangle.skin" />
+    <None Include="wasp.skin" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BallJoint.cpp">

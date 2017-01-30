@@ -126,6 +126,7 @@
     <None Include="tube.skel" />
     <None Include="tube.skin" />
     <None Include="wasp.skel" />
+    <None Include="wasp.skin" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BallJoint.cpp" />

@@ -8,9 +8,15 @@ public:
 	~Skeleton();
 	void update();
 	void draw();
-	bool parseLoad();
 	static glm::mat4 getWorldMatrix(Joint * root, int id);
+	void bindNextJoint();
 	Joint * root;
+	void adjustPos(glm::vec3 axis, bool incr);
+private:
 	char fileName[BUFSIZ];
+	int currJointId;
+	int numJoints;
+
+	bool parseLoad();
 };
 #endif

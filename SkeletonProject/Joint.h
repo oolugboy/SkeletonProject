@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include "DOF.h"
 #define PI 3.14159265358979f
 
 using namespace std;
@@ -19,13 +20,17 @@ class Joint
 		vector < Joint * > children;
 		glm::vec3 boxMin;
 		glm::vec3 boxMax;
+		void printMatrix(glm::mat4 matrix);
+		void printVector(glm::vec3 vec);
 		virtual bool load(Tokenizer * token) = 0;
 		virtual void update(glm::mat4 parentMat) = 0;
 		pair< bool , glm::mat4> findWorldMatrix(int id);
+		void adjustPos(glm::vec3 axis, bool incr, int jointId);
 		void draw();
 		void loadVertices();
 		void genVertices();
 		void render();
+		DOF * dof;
 		GLuint VBO, VAO, TBO, EBO, NBO;
 		GLuint uProjection, uModelview;
 		glm::mat4 modelView;

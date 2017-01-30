@@ -124,7 +124,7 @@ void Window::display_callback(GLFWwindow* window)
 	//Update the view matrix
 	V = glm::lookAt(cam_pos, cam_look_at, cam_up);
 	//Make the scene initially red 
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	// Clear the color and depth buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -160,7 +160,7 @@ void Window::key_callback(GLFWwindow* window, int key, int scancode, int action,
 	{
 		test = true;
 		dragon = wasp = false;
-		cam_pos = glm::vec3(0, 0, 5.0f);
+		cam_pos = glm::vec3(0, 0, 2.0f);
 	}
 	if (action == GLFW_PRESS && key == GLFW_KEY_D) 
 	{
@@ -174,7 +174,41 @@ void Window::key_callback(GLFWwindow* window, int key, int scancode, int action,
 		test = dragon = false;
 		cam_pos = glm::vec3(0, 0, 5.0f);
 	}
-
+	if (action == GLFW_PRESS && key == GLFW_KEY_N)
+	{
+		scene->bindNextJoint();
+	}
+	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+	{
+		if (action == GLFW_PRESS && key == GLFW_KEY_X)
+		{
+			cout << " Pressed the x " << endl;
+			scene->adjustPos(glm::vec3(1.0f, 0.0f, 0.0f), true);
+		}
+		if (action == GLFW_PRESS && key == GLFW_KEY_Y)
+		{
+			scene->adjustPos(glm::vec3(0.0f, 1.0f, 0.0f), true);
+		}
+		if (action == GLFW_PRESS && key == GLFW_KEY_Z)
+		{
+			scene->adjustPos(glm::vec3(0.0f, 0.0f, 1.0f), true);
+		}
+	}
+	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+	{
+		if (action == GLFW_PRESS && key == GLFW_KEY_X)
+		{
+			scene->adjustPos(glm::vec3(1.0f, 0.0f, 0.0f), false);
+		}
+		if (action == GLFW_PRESS && key == GLFW_KEY_Y)
+		{
+			scene->adjustPos(glm::vec3(0.0f, 1.0f, 0.0f), false);
+		}
+		if (action == GLFW_PRESS && key == GLFW_KEY_Z)
+		{
+			scene->adjustPos(glm::vec3(0.0f, 0.0f, 1.0f), false);
+		}
+	}
 }
 void Window::mouse_button_callback(GLFWwindow * window, int button, int action, int mods)
 {
@@ -196,6 +230,7 @@ void Window::mouse_button_callback(GLFWwindow * window, int button, int action, 
 	{
 		leftButton = false;
 	}
+
 }
 void Window::cursor_pos_callback(GLFWwindow * window, double xPos, double yPos)
 {

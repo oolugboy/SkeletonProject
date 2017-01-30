@@ -6,6 +6,23 @@ Joint::Joint()
 {
 	
 }
+void Joint::printMatrix(glm::mat4 matrix)
+{
+	cout << " About to print the matrix " << endl;
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			cout << matrix[i][j] << "  ";
+		}
+		cout << endl;
+	}
+}
+void Joint::printVector(glm::vec3 vec)
+{
+	cout << " About to print the vector " << endl;
+	cout << vec.x << " " << vec.y << " " << vec.z << endl;
+}
 void Joint::loadVertices()
 {
 	// Create array object and buffers. Remember to delete your buffers when the object is destroyed!
@@ -37,6 +54,29 @@ void Joint::loadVertices()
 	// Unbind the VAO now so we don't accidentally tamper with it.
 	// NOTE: You must NEVER unbind the element array buffer associated with a VAO!
 	glBindVertexArray(0);
+}
+void Joint::adjustPos(glm::vec3 axis, bool incr, int jointId)
+{
+	if (jointId == this->id)
+	{
+		/* Might need to scale this later */
+		if (incr)
+			this->dof->pose = this->dof->pose + (axis * 0.25f);
+		else
+			this->dof->pose = this->dof->pose - (axis * 0.25f);
+
+		/* Then clamp the result */
+		this->dof->clamp(this->dof->pose);
+		printVector(this->dof->pose);
+	}
+	else
+	{
+		int size = children.size();
+		for (int i = 0; i < size; i++)
+		{
+			children[i]->adjustPos(axis, incr, jointId);
+		}
+	}
 }
 void Joint::render()
 {
