@@ -185,6 +185,9 @@ void Skin::draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 	/*For the wired */
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	// Unbind the VAO when we're done so we don't accidentally draw extra stuff or tamper with its bound buffers

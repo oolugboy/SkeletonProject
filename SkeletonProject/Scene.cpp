@@ -9,11 +9,14 @@ Scene::Scene()
 	test = new Skeleton("test.skel");
 	dragon = new Skeleton("dragon.skel");
 
-	currSkel = wasp = new Skeleton("wasp.skel");
-	currSkin = waspSkin = new Skin("wasp.skin", wasp->root);
+	wasp = new Skeleton("wasp.skel");
+	waspSkin = new Skin("wasp.skin", wasp->root);
+	//waspAnim = new AnimationClip("wasp_walk.anim", wasp);
 
-	tube = new Skeleton("tube.skel");
-	tubeSkin = new Skin("tube.skin", tube->root);
+	currSkel = tube = new Skeleton("tube.skel");
+	currSkin = tubeSkin = new Skin("tube.skin", tube->root);
+
+	sampleAnim = new AnimationClip("sample.anim", tube);
 }
 
 void Scene::drawTest(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)

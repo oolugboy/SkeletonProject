@@ -67,7 +67,7 @@ void Joint::adjustPos(glm::vec3 axis, bool incr, int jointId)
 
 		/* Then clamp the result */
 		this->dof->clamp(this->dof->pose);
-		printVector(this->dof->pose);
+		//printVector(this->dof->pose);
 	}
 	else
 	{

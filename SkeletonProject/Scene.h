@@ -20,6 +20,7 @@
 #include <string>
 #include "Skeleton.h"
 #include "Skin.h"
+#include "AnimationClip.h"
 
 
 class Scene
@@ -51,13 +52,14 @@ public:
 	Skin * waspSkin;
 	Skin * tubeSkin;
 
+	/* Animation clips */
+	AnimationClip * waspAnim;
+	AnimationClip * sampleAnim;
+
 	void bindNextJoint();
 	void adjustPos(glm::vec3 axis, bool incr);
 	void mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height);
 	glm::vec3 trackBallMapping(glm::vec3 point, int width, int height);
 
-	/* The lighting specifications */
-	glm::vec3 lightPos1;
-	glm::vec3 lightPos2;
 };
 #endif

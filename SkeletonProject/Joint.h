@@ -31,7 +31,7 @@ class Joint
 		void genVertices();
 		void render();
 		DOF * dof;
-		GLuint VBO, VAO, TBO, EBO, NBO;
+		GLuint VBO, VAO;
 		GLuint uProjection, uModelview;
 		glm::mat4 modelView;
 		glm::mat4 toWorld;

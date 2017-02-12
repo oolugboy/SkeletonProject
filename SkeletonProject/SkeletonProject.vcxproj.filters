@@ -25,6 +25,8 @@
     <None Include="tube.skin" />
     <None Include="triangle.skin" />
     <None Include="wasp.skin" />
+    <None Include="wasp_walk.anim" />
+    <None Include="sample.anim" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BallJoint.cpp">
@@ -60,6 +62,15 @@
     <ClCompile Include="Skin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationClip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Channel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BallJoint.h">
@@ -93,6 +104,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Skin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationClip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Channel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyFrame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

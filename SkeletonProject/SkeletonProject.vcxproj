@@ -119,6 +119,7 @@
   <ItemGroup>
     <None Include="dragon.skel" />
     <None Include="packages.config" />
+    <None Include="sample.anim" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
     <None Include="test.skel" />
@@ -127,12 +128,16 @@
     <None Include="tube.skin" />
     <None Include="wasp.skel" />
     <None Include="wasp.skin" />
+    <None Include="wasp_walk.anim" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationClip.cpp" />
     <ClCompile Include="BallJoint.cpp" />
+    <ClCompile Include="Channel.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DOF.cpp" />
     <ClCompile Include="Joint.cpp" />
+    <ClCompile Include="KeyFrame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -142,10 +147,13 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationClip.h" />
     <ClInclude Include="BallJoint.h" />
+    <ClInclude Include="Channel.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DOF.h" />
     <ClInclude Include="Joint.h" />
+    <ClInclude Include="KeyFrame.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
