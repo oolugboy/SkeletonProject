@@ -26,7 +26,5 @@ bool KeyFrame::load(Tokenizer * token)
 		strcpy(inTangRule, temp);
 		token->GetToken(outTangRule);
 	}
-	cout << " The inTangRule is " << inTangRule << endl;
-	cout << " The outTangRule is " << outTangRule << endl;
 	return true;
 }

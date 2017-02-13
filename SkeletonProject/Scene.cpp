@@ -5,7 +5,6 @@ using namespace std;
 
 Scene::Scene()
 {
-	cout << " About to create the skeleton " << endl;
 	test = new Skeleton("test.skel");
 	dragon = new Skeleton("dragon.skel");
 

@@ -31,6 +31,7 @@ bool AnimationClip::load()
 		{
 			Channel * newChan = new Channel(rangeBegin, rangeEnd);
 			newChan->load(token);	
+			newChan->precompute();
 			channels.push_back(newChan);
 		}	
 		else if (strcmp(temp, "}") == 0) // We are done
