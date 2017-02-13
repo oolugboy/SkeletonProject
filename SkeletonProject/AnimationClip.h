@@ -19,7 +19,12 @@ public:
 	const char * fileName;
 	Skeleton * skeleton;
 	bool load();
+	void update();
 	int numChannels;
+	clock_t origTime;
+	float elapsedTime;
+	void evaluateChannels(float t);
+	bool timeSet;
 	~AnimationClip();
 };
 #endif

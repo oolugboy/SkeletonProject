@@ -32,8 +32,8 @@ void Channel::calcCubicCoeff()
 		glm::vec4 keyParams;
 		keyParams[0] = keys[i]->val;		
 		keyParams[1] = keys[i + 1]->val;
-		keyParams[2] = keys[i]->outTang;
-		keyParams[3] = keys[i + 1]->outTang;	
+		keyParams[2] = keys[i]->outTang * (keys[i + 1]->t - keys[i]->t);
+		keyParams[3] = keys[i + 1]->outTang * (keys[i + 1]->t - keys[i]->t);	
 		
 		glm::vec4 res = mult * keyParams;
 		keys[i]->A = res[0];
@@ -41,6 +41,29 @@ void Channel::calcCubicCoeff()
 		keys[i]->C = res[2];
 		keys[i]->D = res[3];
 	}
+}
+float Channel::evaluate(float currTime)
+{
+	/* Do a brute force linear search first */
+	int size = keys.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (keys[i]->t == currTime)
+			return keys[i]->val;
+		if (i < (size - 1))
+		{
+			if (keys[i]->t < currTime && keys[i + 1]->t > currTime)
+			{
+				return getValWithCubicCoeff(i, currTime);
+			}
+		}
+	}
+	return 0; // TODO The extrapolate 
+}
+float Channel::getValWithCubicCoeff(int index, float currTime)
+{
+	float u = (currTime - keys[index]->t) / (keys[index + 1]->t - keys[index]->t);
+	return keys[index]->D + (u * (keys[index]->C + (u * (keys[index]->B + (u * keys[index]->A)))));
 }
 void Channel::calcTangents()
 {
@@ -80,10 +103,13 @@ void Channel::calcTangents()
 			}
 			else
 			{	
-				if(i == 0)  /* Linear for the last case */
-					keys[i]->outTang = (float)(keys[i]->val - keys[i + 1]->val) / (float)(keys[i]->t - keys[i + 1]->t);
-				else  /* Linear for the last case */
-					keys[i]->inTang = (float)(keys[i]->val - keys[i - 1]->val) / (float)(keys[i]->t - keys[i - 1]->t);
+				if (size > 1)// NEED TO FIX THIS !!!!!
+				{
+					if (i == 0)  /* Linear for the last case */
+						keys[i]->outTang = (float)(keys[i]->val - keys[i + 1]->val) / (float)(keys[i]->t - keys[i + 1]->t);
+					else  /* Linear for the last case */
+						keys[i]->inTang = (float)(keys[i]->val - keys[i - 1]->val) / (float)(keys[i]->t - keys[i - 1]->t);
+				}
 			}
 		}
 	}

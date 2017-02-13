@@ -8,12 +8,12 @@ Scene::Scene()
 	test = new Skeleton("test.skel");
 	dragon = new Skeleton("dragon.skel");
 
-	wasp = new Skeleton("wasp.skel");
-	waspSkin = new Skin("wasp.skin", wasp->root);
-	//waspAnim = new AnimationClip("wasp_walk.anim", wasp);
+	currSkel = wasp = new Skeleton("wasp.skel");
+	currSkin = waspSkin = new Skin("wasp.skin", wasp->root);
+	waspAnim = new AnimationClip("wasp_walk.anim", wasp);
 
-	currSkel = tube = new Skeleton("tube.skel");
-	currSkin = tubeSkin = new Skin("tube.skin", tube->root);
+	tube = new Skeleton("tube.skel");
+	tubeSkin = new Skin("tube.skin", tube->root);
 
 	sampleAnim = new AnimationClip("sample.anim", tube);
 }
@@ -46,7 +46,7 @@ void Scene::adjustPos(glm::vec3 axis, bool incr)
 }
 void Scene::update()
 {
-	currSkel->update();
+	waspAnim->update();
 	currSkin->update();
 }
 

@@ -25,6 +25,8 @@ class Joint
 		virtual bool load(Tokenizer * token) = 0;
 		virtual void update(glm::mat4 parentMat) = 0;
 		pair< bool , glm::mat4> findWorldMatrix(int id);
+		void animateOffset(glm::vec3 newOffset);
+		void animatePose(glm::vec3 newPose, int jointId);
 		void adjustPos(glm::vec3 axis, bool incr, int jointId);
 		void draw();
 		void loadVertices();

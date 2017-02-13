@@ -55,6 +55,26 @@ void Joint::loadVertices()
 	// NOTE: You must NEVER unbind the element array buffer associated with a VAO!
 	glBindVertexArray(0);
 }
+void Joint::animatePose(glm::vec3 newPose, int jointId)
+{
+	if (jointId == this->id)
+	{
+		this->dof->pose = newPose;
+		this->dof->clamp(this->dof->pose);
+	}
+	else
+	{
+		int size = children.size();
+		for (int i = 0; i < size; i++)
+		{
+			children[i]->animatePose(newPose, jointId);
+		}
+	}
+}
+void Joint::animateOffset(glm::vec3 newOffset)
+{
+	this->offset = newOffset;	
+}
 void Joint::adjustPos(glm::vec3 axis, bool incr, int jointId)
 {
 	if (jointId == this->id)

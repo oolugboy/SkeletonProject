@@ -12,6 +12,8 @@ public:
 	void bindNextJoint();
 	Joint * root;
 	void adjustPos(glm::vec3 axis, bool incr);
+	void animatePose(glm::vec3 newPose, int jointId);
+	void animateRootOffset(glm::vec3 newOffset);
 private:
 	char fileName[BUFSIZ];
 	int currJointId;

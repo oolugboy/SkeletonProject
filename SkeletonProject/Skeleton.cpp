@@ -19,6 +19,14 @@ void Skeleton::adjustPos(glm::vec3 axis, bool incr)
 {
 	root->adjustPos(axis, incr, currJointId);
 }
+void Skeleton::animatePose(glm::vec3 newPose, int jointId)
+{
+	root->animatePose(newPose, jointId);
+}
+void Skeleton::animateRootOffset(glm::vec3 newOffset)
+{
+	root->animateOffset(newOffset);
+}
 void Skeleton::update()
 {
 	root->update(glm::mat4(1.0f));
