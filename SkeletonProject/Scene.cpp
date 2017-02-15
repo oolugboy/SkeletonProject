@@ -15,7 +15,7 @@ Scene::Scene()
 	tube = new Skeleton("tube.skel");
 	tubeSkin = new Skin("tube.skin", tube->root);
 
-	sampleAnim = new AnimationClip("sample.anim", tube);
+	//sampleAnim = new AnimationClip("sample.anim", tube);
 }
 
 void Scene::drawTest(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)

@@ -21,6 +21,8 @@ public:
 	float evaluate(float currTime);
 	void calcTangents();
 	void calcCubicCoeff();
+	bool debug;
+	float getExtrapVal(float currTime, bool inExtrap);
 	float getValWithCubicCoeff(int index, float currTime);
 	void precompute();
 	bool load(Tokenizer * token);
