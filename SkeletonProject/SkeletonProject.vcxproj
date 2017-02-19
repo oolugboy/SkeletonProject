@@ -134,32 +134,38 @@
     <ClCompile Include="AnimationClip.cpp" />
     <ClCompile Include="BallJoint.cpp" />
     <ClCompile Include="Channel.cpp" />
+    <ClCompile Include="Cloth.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DOF.cpp" />
     <ClCompile Include="Joint.cpp" />
     <ClCompile Include="KeyFrame.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="Skin.cpp" />
     <ClCompile Include="Token.cpp" />
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationClip.h" />
     <ClInclude Include="BallJoint.h" />
     <ClInclude Include="Channel.h" />
+    <ClInclude Include="Cloth.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DOF.h" />
     <ClInclude Include="Joint.h" />
     <ClInclude Include="KeyFrame.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skeleton.h" />
     <ClInclude Include="Skin.h" />
     <ClInclude Include="Token.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

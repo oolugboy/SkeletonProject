@@ -21,6 +21,7 @@
 #include "Skeleton.h"
 #include "Skin.h"
 #include "AnimationClip.h"
+#include "Cloth.h"
 
 
 class Scene
@@ -55,6 +56,9 @@ public:
 	/* Animation clips */
 	AnimationClip * waspAnim;
 	AnimationClip * sampleAnim;
+
+	/* Animating cloth */
+	Cloth * cloth;
 
 	void bindNextJoint();
 	void adjustPos(glm::vec3 axis, bool incr);

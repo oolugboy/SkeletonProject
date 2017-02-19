@@ -15,6 +15,8 @@ Scene::Scene()
 	tube = new Skeleton("tube.skel");
 	tubeSkin = new Skin("tube.skin", tube->root);
 
+	cloth = new Cloth(10, 0.0f, 0.0f);
+
 	//sampleAnim = new AnimationClip("sample.anim", tube);
 }
 
@@ -24,7 +26,8 @@ void Scene::drawTest(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 	//test->draw();
 	//tube->draw();
 	//tubeSkin->draw(shaderProgram, view, projection);
-	currSkin->draw(shaderProgram, view, projection);
+	//currSkin->draw(shaderProgram, view, projection);
+	cloth->draw(shaderProgram, view, projection);
 }
 void Scene::drawDragon(GLint shaderProgram)
 {
@@ -46,8 +49,9 @@ void Scene::adjustPos(glm::vec3 axis, bool incr)
 }
 void Scene::update()
 {
-	waspAnim->update();
-	currSkin->update();
+/*	waspAnim->update();
+	currSkin->update(); */
+	cloth->update();
 }
 
 void Scene::mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height)
