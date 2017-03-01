@@ -15,7 +15,7 @@ Scene::Scene()
 	tube = new Skeleton("tube.skel");
 	tubeSkin = new Skin("tube.skin", tube->root);
 
-	cloth = new Cloth(10, 0.0f, 0.0f);
+	cloth = new Cloth(2, 0.0f, 0.0f);
 
 	//sampleAnim = new AnimationClip("sample.anim", tube);
 }
@@ -47,11 +47,21 @@ void Scene::adjustPos(glm::vec3 axis, bool incr)
 {
 	currSkel->adjustPos(axis, incr);
 }
+void Scene::adjustWindSpeed(bool incr)
+{
+	cloth->adjustWindSpeed(incr);
+}
+void Scene::moveCloth(glm::vec3 diff)
+{
+	cloth->moveFixedParticles(diff);
+}
 void Scene::update()
 {
 /*	waspAnim->update();
 	currSkin->update(); */
-	cloth->update();
+	float currTime = ((float)clock() / CLOCKS_PER_SEC);
+	cloth->update(currTime - prevTime);
+	prevTime = currTime;
 }
 
 void Scene::mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height)

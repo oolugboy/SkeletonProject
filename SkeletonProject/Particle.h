@@ -2,6 +2,7 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <unordered_set>
+#include <time.h>
 class Particle
 {
 public:
@@ -12,7 +13,10 @@ public:
 	bool fixed;
 	Particle(glm::vec3 initPosition);
 	glm::vec3 normal;
-	void update();
+	void update(float deltaT);
 	void draw();
-	void applyForce();
+	void applyForce(glm::vec3 force);
+	void zeroOutForce();
+	static float currTime;
+	bool debug;
 };

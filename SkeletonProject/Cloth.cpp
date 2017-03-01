@@ -1,4 +1,5 @@
 #include "Cloth.h"
+#include <time.h>
 #include <iostream>
 
 
@@ -7,14 +8,17 @@ Cloth::Cloth(int width, float springFactor, float dampingFactor)
 	this->width = width;	
 	this->dampingFactor = springFactor;
 	this->dampingFactor = dampingFactor;
+	this->div = 0.1f;
 	initParticles();
 	vertTriMap.resize(particles.size());
+	initSpringDampers();
 	initTriangles();
+	this->gravity = glm::vec3(0.0f, -10.0f, 0.0f);
+	this->windVelocity = glm::vec3(0.0f, 0.0f, -30.0f);
 }
 
 void Cloth::initParticles()
 {
-	float div = 0.1f;
 	int gridSize = ((float)width / div) + 1;
 	float currZ = width * -1.0f;
 	//float currY = width + 1; // Just add a little space 
@@ -25,13 +29,24 @@ void Cloth::initParticles()
 		for (int j = 0; j < gridSize; j++)
 		{
 			Particle * newPart = new Particle(glm::vec3(currX, currY, currZ));
+			if (i == 0)
+				newPart->fixed = true;
 			particles.push_back(newPart);
 			currX += div;
 		}
 		currZ += div;
 	}
 	/* Fix the corners of the cloth  */
-	particles[0]->fixed = particles[gridSize - 1]->fixed = true;
+	particles[1]->debug = true;
+	//particles[2]->debug = true;
+}
+void Cloth::moveFixedParticles(glm::vec3 diff)
+{
+	int gridSize = ((float)width / div) + 1;
+	for (int i = 0; i < gridSize; i++)
+	{
+		particles[i]->position = particles[i]->position + diff;
+	}
 }
 void Cloth::draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 {
@@ -43,7 +58,6 @@ void Cloth::draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 }
 void Cloth::initTriangles()
 {	
-	float div = 1.0f;
 	int gridSize = ((float)width / div) + 1;
 	for (int i = 1; i < gridSize; i++)
 	{
@@ -69,19 +83,115 @@ void Cloth::initTriangles()
 		}
 	}
 }
-
-void Cloth::update()
+void Cloth::initSpringDampers()
 {
-	updateNormals();
+	int gridSize = ((float)width / div) + 1;
+	float sideLength = div;
+	float diagLength = sqrt(pow(sideLength, 2) + pow(sideLength, 2));
+	for (int i = 1; i < gridSize; i++)
+	{
+		for (int j = 0; j < gridSize - 1; j++)
+		{
+			int indexA = (gridSize * i) + j, indexB = (gridSize * (i - 1)) + (j + 1);
+			int indexC = (gridSize * (i - 1)) + j, indexD = (gridSize * (i)) + (j + 1);
+
+			SpringDamper * leftVert = new SpringDamper(particles[indexA], particles[indexC], sideLength);
+			springDampers.push_back(leftVert);
+			SpringDamper * topHoriz = new SpringDamper(particles[indexC], particles[indexB], sideLength);
+			springDampers.push_back(topHoriz);
+			SpringDamper * leftDiag = new SpringDamper(particles[indexC], particles[indexD], diagLength);
+			springDampers.push_back(leftDiag);
+			SpringDamper * rightDiag = new SpringDamper(particles[indexA], particles[indexB], diagLength);
+			springDampers.push_back(rightDiag);
+
+			if (i == (gridSize - 1))
+				springDampers.push_back(new SpringDamper(particles[indexA], particles[indexD], sideLength));
+			if (j == (gridSize - 1))
+				springDampers.push_back(new SpringDamper(particles[indexB], particles[indexD], sideLength));			
+		}
+	}
+}
+float Cloth::getMag(glm::vec3 val)
+{
+	return sqrt(pow(val.x, 2) + pow(val.y, 2) + pow(val.z, 2));
+}
+void Cloth::adjustWindSpeed(bool incr)
+{
+	glm::vec3 windDir = glm::normalize(windVelocity);
+	float speed = getMag(windVelocity);
+	if (incr)
+	{
+		if (speed <= (windMax - windOff))
+		{
+			windVelocity = (speed + windOff) * windDir;
+		}
+	}
+	else
+	{
+		if (speed > windOff) 
+		{
+			windVelocity = (speed - windOff) * windDir;
+		}
+	}
 }
 
-void Cloth::updateNormals()
+void Cloth::update(float deltaT)
+{
+	/* Then apply gravity */
+	zeroOutForces();
+	applyGravity();
+	applyAeroDynForce();
+	updateSpringDampers(deltaT);
+	updateParticles(deltaT);
+	updateNormals(deltaT);
+}
+void Cloth::zeroOutForces()
+{
+	int size = particles.size();
+	for (int i = 0; i < size; i++)
+	{
+		particles[i]->zeroOutForce();
+	}
+}
+void Cloth::applyAeroDynForce()
+{
+	int size = triangles.size();
+	for (int i = 0; i < size; i++)
+	{
+		triangles[i]->applyAeroDynForce(windVelocity);
+	}
+}
+void Cloth::applyGravity()
+{
+	int size = particles.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (particles[i]->fixed == false)
+		{		
+			particles[i]->applyForce(gravity);
+		}
+	}
+}
+void Cloth::updateSpringDampers(float deltaT)
+{
+	int size = springDampers.size();
+	for (int i = 0; i < size; i++)
+	{
+		springDampers[i]->update(deltaT);
+	}
+}
+void Cloth::updateParticles(float deltaT)
+{
+	int size = particles.size();
+	for (int i = 0; i < size; i++)
+	{
+		particles[i]->update(deltaT);
+	}
+}
+void Cloth::updateNormals(float deltaT)
 {
 	int partSize = particles.size();
 	int triSize = triangles.size();
-
-	cout << " The particles size is " << partSize << endl;
-	cout << " The triangles size is " << triSize << endl;
 	
 	/* First get the normal for the triangles */
 	for (int i = 0; i < triSize; i++)
@@ -102,12 +212,10 @@ void Cloth::updateNormals()
 			resNorm = resNorm + (*sit)->normal;
 		}
 		particles[i]->normal = glm::normalize(resNorm);
-		particles[i]->update();
 	}
-
 	/* Need to update the triangle for rendering */
 	for (int i = 0; i < triSize; i++)
 	{
-		triangles[i]->update();
+		triangles[i]->update(deltaT);
 	}
 }

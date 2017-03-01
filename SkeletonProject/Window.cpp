@@ -151,32 +151,64 @@ void Window::display_callback(GLFWwindow* window)
 void Window::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	// Check if escape was pressed
-	if (action == GLFW_PRESS && key == GLFW_KEY_ESCAPE)
+	if (action == GLFW_PRESS)
 	{
-		// Close the window. This causes the program to also terminate.
-		glfwSetWindowShouldClose(window, GL_TRUE);
-	}	
-	if (action == GLFW_PRESS && key == GLFW_KEY_T) 
-	{
-		test = true;
-		dragon = wasp = false;
-		cam_pos = glm::vec3(0, 0, 2.0f);
+		if (key == GLFW_KEY_ESCAPE)
+		{
+			// Close the window. This causes the program to also terminate.
+			glfwSetWindowShouldClose(window, GL_TRUE);
+		}
+		if (key == GLFW_KEY_T)
+		{
+			test = true;
+			dragon = wasp = false;
+			cam_pos = glm::vec3(0, 0, 2.0f);
+		}
+		if (key == GLFW_KEY_D)
+		{
+			dragon = true;
+			wasp = test = false;
+			cam_pos = glm::vec3(0, 0, 40.0f);
+		}
+
+		if (key == GLFW_KEY_N)
+		{
+			scene->bindNextJoint();
+		}
+		if (key == GLFW_KEY_UP)
+		{
+			scene->moveCloth(glm::vec3(0.0f, 0.5f, 0.0f));
+		}
+		if (key == GLFW_KEY_DOWN)
+		{
+			scene->moveCloth(glm::vec3(0.0f, -0.5f, 0.0f));
+		}
+		if (key == GLFW_KEY_LEFT)
+		{
+			scene->moveCloth(glm::vec3(-0.5f, 0.0f, 0.0f));
+		}
+		if (key == GLFW_KEY_RIGHT)
+		{
+			scene->moveCloth(glm::vec3(0.5f, 0.0f, 0.0f));
+		}
 	}
-	if (action == GLFW_PRESS && key == GLFW_KEY_D) 
+
+	if (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS ||
+			glfwGetKey(window, GLFW_KEY_LEFT_SHIFT == GLFW_PRESS))
 	{
-		dragon = true;
-		wasp = test = false;
-		cam_pos = glm::vec3(0, 0, 40.0f);
+		if (action == GLFW_PRESS && key == GLFW_KEY_W)
+		{
+			cout << " Increasind wind speed  " << endl;
+			scene->adjustWindSpeed(true);
+		}
 	}
-	if (action == GLFW_PRESS && key == GLFW_KEY_W)
+	else
 	{
-		wasp = true;
-		test = dragon = false;
-		cam_pos = glm::vec3(0, 0, 5.0f);
-	}
-	if (action == GLFW_PRESS && key == GLFW_KEY_N)
-	{
-		scene->bindNextJoint();
+		if (action == GLFW_PRESS && key == GLFW_KEY_W)
+		{
+			cout << " Decreasing wind speed " << endl;
+			scene->adjustWindSpeed(false);
+		}
 	}
 	if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
 	{
@@ -209,6 +241,7 @@ void Window::key_callback(GLFWwindow* window, int key, int scancode, int action,
 			scene->adjustPos(glm::vec3(0.0f, 0.0f, 1.0f), false);
 		}
 	}
+	
 }
 void Window::mouse_button_callback(GLFWwindow * window, int button, int action, int mods)
 {

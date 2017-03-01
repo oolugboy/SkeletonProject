@@ -145,6 +145,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="Skin.cpp" />
+    <ClCompile Include="SpringDamper.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skeleton.h" />
     <ClInclude Include="Skin.h" />
+    <ClInclude Include="SpringDamper.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Window.h" />

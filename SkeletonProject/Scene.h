@@ -22,6 +22,7 @@
 #include "Skin.h"
 #include "AnimationClip.h"
 #include "Cloth.h"
+#include <time.h>
 
 
 class Scene
@@ -60,9 +61,13 @@ public:
 	/* Animating cloth */
 	Cloth * cloth;
 
+	float prevTime;
+
 	void bindNextJoint();
 	void adjustPos(glm::vec3 axis, bool incr);
 	void mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height);
+	void moveCloth(glm::vec3 diff);
+	void adjustWindSpeed(bool incr);
 	glm::vec3 trackBallMapping(glm::vec3 point, int width, int height);
 
 };

@@ -7,15 +7,37 @@ Triangle::Triangle(Particle * a, Particle * b, Particle * c)
 	this->b = b;
 	this->c = c;
 
+	airDensity = 2.0f;
+	dragCoeff = 2.0f;
 	toWorld = glm::mat4(1.0f);
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &NBO);
 }
+float Triangle::getMag(glm::vec3 val)
+{
+	return sqrt(pow(val.x, 2) + pow(val.y, 2) + pow(val.z, 2));
+}
 void Triangle::calcNormal()
 {	
-	normal = glm::normalize(cross(b->position - a->position, c->position - a->position));
+	normal = glm::normalize(glm::cross(b->position - a->position, c->position - a->position));
+}
+void Triangle::applyAeroDynForce(glm::vec3 windVelocity)
+{
+	glm::vec3 avgVel = (a->velocity + b->velocity + c->velocity) / 3.0f;
+	glm::vec3 relVelocity = avgVel - windVelocity;
+	calcExposedArea(relVelocity);
+	float sqMag = pow(getMag(relVelocity), 2);
+	glm::vec3 resForce = (-0.5f * airDensity * sqMag * dragCoeff * area * normal) /3.0f;
+	a->applyForce(resForce);
+	b->applyForce(resForce);
+	c->applyForce(resForce);	
+}
+void Triangle::calcExposedArea(glm::vec3 relVelocity)
+{
+	float a0 = 0.5f * getMag(cross(b->position - a->position, c->position - a->position));
+	this->area = a0 * (glm::dot(relVelocity, normal)/getMag(relVelocity));
 }
 void Triangle::loadVertices()
 {	
@@ -51,25 +73,30 @@ void Triangle::loadVertices()
 	// NOTE: You must NEVER unbind the element array buffer associated with a VAO!
 	glBindVertexArray(0);
 }
-void Triangle::update()
-{
+void Triangle::update(float deltaT)
+{	
 	fillVertsAndNorms();
 	loadVertices();
 }
 void Triangle::fillVertsAndNorms()
 {
+	/* First clear the vertices*/
+	vertices.clear();
+	
 	vertices.push_back(a->position);
 	vertices.push_back(b->position);
 	vertices.push_back(c->position);
 
 	/* Now for the normals */
+	normals.clear();
+
 	normals.push_back(a->normal);
 	normals.push_back(b->normal);
 	normals.push_back(c->normal);
 }
 void Triangle::draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 {	
-	cout << " drawing " << endl;
+//	cout << " drawing " << endl;
 	// Get the location of the uniform variables "projection" and "modelview"
 	uProjection = glGetUniformLocation(shaderProgram, "projection");
 	uModelview = glGetUniformLocation(shaderProgram, "modelview");
@@ -85,10 +112,10 @@ void Triangle::draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 	glEnable(GL_DEPTH_TEST);
 
 	/*For the wired */
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	/*glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK); */
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK); 
 
 	glDrawArrays(GL_TRIANGLES, 0, 3); // # for 3 sides of a triangle 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -101,10 +128,4 @@ Triangle::~Triangle()
 	glDeleteBuffers(1, &NBO);
 	glDeleteVertexArrays(1, &VAO);
 }
-glm::vec3 cross(glm::vec3 a, glm::vec3 b)
-{
-	float xVal = (a.y * b.z) - (a.z * b.y);
-	float yVal = ((a.x * b.z) - (a.z * b.x)) * -1.0f;
-	float zVal = (a.x * b.y) - (a.y * b.x);
-	return glm::vec3(xVal, yVal, zVal);
-}
+
