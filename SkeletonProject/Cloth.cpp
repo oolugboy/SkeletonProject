@@ -106,7 +106,7 @@ void Cloth::initSpringDampers()
 
 			if (i == (gridSize - 1))
 				springDampers.push_back(new SpringDamper(particles[indexA], particles[indexD], sideLength));
-			if (j == (gridSize - 1))
+			if ((j + 1) == (gridSize - 1))
 				springDampers.push_back(new SpringDamper(particles[indexB], particles[indexD], sideLength));			
 		}
 	}
