@@ -11,12 +11,11 @@ public:
 	glm::vec3 velocity;
 	glm::vec3 force;
 	bool fixed;
-	Particle(glm::vec3 initPosition);
+	Particle();
 	glm::vec3 normal;
-	void update(float deltaT);
-	void draw();
+	virtual void update(float deltaT) = 0;	
+	float getMag(glm::vec3 val);
 	void applyForce(glm::vec3 force);
-	void zeroOutForce();
-	static float currTime;
+	void zeroOutForce();	
 	bool debug;
 };

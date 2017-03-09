@@ -135,8 +135,10 @@
     <ClCompile Include="BallJoint.cpp" />
     <ClCompile Include="Channel.cpp" />
     <ClCompile Include="Cloth.cpp" />
+    <ClCompile Include="ClothParticle.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DOF.cpp" />
+    <ClCompile Include="Fluid.cpp" />
     <ClCompile Include="Joint.cpp" />
     <ClCompile Include="KeyFrame.cpp" />
     <ClCompile Include="main.cpp" />
@@ -145,9 +147,11 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="Skin.cpp" />
+    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="SpringDamper.cpp" />
     <ClCompile Include="Token.cpp" />
     <ClCompile Include="Triangle.cpp" />
+    <ClCompile Include="WaterParticle.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,8 +159,10 @@
     <ClInclude Include="BallJoint.h" />
     <ClInclude Include="Channel.h" />
     <ClInclude Include="Cloth.h" />
+    <ClInclude Include="ClothParticle.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="DOF.h" />
+    <ClInclude Include="Fluid.h" />
     <ClInclude Include="Joint.h" />
     <ClInclude Include="KeyFrame.h" />
     <ClInclude Include="main.h" />
@@ -165,9 +171,11 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skeleton.h" />
     <ClInclude Include="Skin.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="SpringDamper.h" />
     <ClInclude Include="Token.h" />
     <ClInclude Include="Triangle.h" />
+    <ClInclude Include="WaterParticle.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

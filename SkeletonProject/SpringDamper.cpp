@@ -5,7 +5,7 @@ SpringDamper::SpringDamper(Particle * a, Particle * b, float restLength)
 {
 	this->a = a;
 	this->b = b;
-	this->springConst = 2000.0f;
+	this->springConst = 3000.0f;
 	this->dampFact = 40.0f;
 	this->restLength = restLength;
 }

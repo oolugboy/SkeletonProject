@@ -28,7 +28,7 @@ void Cloth::initParticles()
 		float currX = width * -1.0f;
 		for (int j = 0; j < gridSize; j++)
 		{
-			Particle * newPart = new Particle(glm::vec3(currX, currY, currZ));
+			Particle * newPart = new ClothParticle(glm::vec3(currX, currY, currZ));
 			if (i == 0)
 				newPart->fixed = true;
 			particles.push_back(newPart);

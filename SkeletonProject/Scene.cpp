@@ -17,6 +17,7 @@ Scene::Scene()
 
 	cloth = new Cloth(2, 0.0f, 0.0f);
 
+	water = new Fluid();
 	//sampleAnim = new AnimationClip("sample.anim", tube);
 }
 
@@ -27,7 +28,8 @@ void Scene::drawTest(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 	//tube->draw();
 	//tubeSkin->draw(shaderProgram, view, projection);
 	//currSkin->draw(shaderProgram, view, projection);
-	cloth->draw(shaderProgram, view, projection);
+	//cloth->draw(shaderProgram, view, projection);
+	water->draw(shaderProgram, view, projection);
 }
 void Scene::drawDragon(GLint shaderProgram)
 {
@@ -61,6 +63,7 @@ void Scene::update()
 	currSkin->update(); */
 	float currTime = ((float)clock() / CLOCKS_PER_SEC);
 	cloth->update(currTime - prevTime);
+	water->update(currTime - prevTime);
 	prevTime = currTime;
 }
 

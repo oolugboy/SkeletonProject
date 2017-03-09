@@ -3,33 +3,10 @@
 
 using namespace std;
 
-Particle::Particle(glm::vec3 initPosition)
+Particle::Particle()
 {
-	position = initPosition;
-	velocity = force = glm::vec3(0, 0, 0);
-	fixed = false;
-	this->mass = 5.0f;
-	debug = false;
-}
-
-void Particle::update(float deltaT)
-{
-	if (fixed == false)
-	{
-		/* if (debug)
-			cout << " The resuling force " << force.x << " " << force.y << " " << force.z << endl; */
-		glm::vec3 acc = force / mass;
-		velocity = velocity + (acc * deltaT);
-		position = position + (velocity * deltaT);
-		
-		/*if (debug)
-			cout << position.x << " " << position.y << " " << position.z << endl;*/
-	}
-	if (position.y < 0)
-	{
-		position.y = 0 - position.y;			
-		velocity = glm::vec3(0, 0, 0.2f * velocity.z);
-	}
+	mass = 1.0f;
+	velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 void Particle::applyForce(glm::vec3 force)
 {
@@ -38,4 +15,8 @@ void Particle::applyForce(glm::vec3 force)
 void Particle::zeroOutForce()
 {
 	this->force = glm::vec3(0, 0, 0);
+}
+float Particle::getMag(glm::vec3 val)
+{
+	return sqrt(pow(val.x, 2) + pow(val.y, 2) + pow(val.z, 2));
 }

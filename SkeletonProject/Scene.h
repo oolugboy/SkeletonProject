@@ -22,6 +22,7 @@
 #include "Skin.h"
 #include "AnimationClip.h"
 #include "Cloth.h"
+#include "Fluid.h"
 #include <time.h>
 
 
@@ -61,6 +62,8 @@ public:
 	/* Animating cloth */
 	Cloth * cloth;
 
+	/* The water */
+	Fluid * water;
 	float prevTime;
 
 	void bindNextJoint();

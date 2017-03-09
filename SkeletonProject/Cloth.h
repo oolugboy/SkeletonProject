@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Triangle.h"
 #include "SpringDamper.h"
+#include "ClothParticle.h"
 #include <vector>
 #include <unordered_set>
 
