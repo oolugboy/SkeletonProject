@@ -96,7 +96,7 @@ glm::vec3 WaterParticle::getKernelGradient(WaterParticle * nBor)
 
 	return glm::vec3(kDiff / xDiff, kDiff / yDiff, kDiff / zDiff);
 }
-void WaterParticle::getViscocityGradient()
+glm::vec3 WaterParticle::getViscocityGradient()
 {
 
 }

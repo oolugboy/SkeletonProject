@@ -31,6 +31,7 @@ public:
 	void updateLocalDensity();
 	void updatePressure();
 	glm::vec3 getPressureGradient();
+	glm::vec3 getViscocityGradient();
 	glm::vec3 getKernelGradient(WaterParticle * nBor);
 	const float stiffConst = 3.0f;
 	vector< WaterParticle *> neighbors;
