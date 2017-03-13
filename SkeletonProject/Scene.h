@@ -23,6 +23,7 @@
 #include "AnimationClip.h"
 #include "Cloth.h"
 #include "Fluid.h"
+#include "RotationScene.h"
 #include <time.h>
 
 
@@ -64,9 +65,15 @@ public:
 
 	/* The water */
 	Fluid * water;
+
+	/* The rotation scene */
+	RotationScene * rtScene = new RotationScene();
+
 	float prevTime;
 
 	void bindNextJoint();
+	void bindNextCube();
+	void rotateBoundCube(float deg, glm::vec3 axis);
 	void adjustPos(glm::vec3 axis, bool incr);
 	void mouseOrbit(glm::vec3 & lastPosition, glm::vec3 & currPosition, glm::vec3 & cam_pos, int width, int height);
 	void moveCloth(glm::vec3 diff);

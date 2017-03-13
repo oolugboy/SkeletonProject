@@ -16,9 +16,10 @@ Scene::Scene()
 	currSkin = tubeSkin = new Skin("tube.skin", tube->root);
 
 	cloth = new Cloth(2, 0.0f, 0.0f);
-
+	
 	water = new Fluid();
 	//sampleAnim = new AnimationClip("sample.anim", tube);
+	rtScene = new RotationScene();
 }
 
 void Scene::drawTest(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
@@ -29,7 +30,8 @@ void Scene::drawTest(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 	//tubeSkin->draw(shaderProgram, view, projection);
 	//currSkin->draw(shaderProgram, view, projection);
 	//cloth->draw(shaderProgram, view, projection);
-	water->draw(shaderProgram, view, projection);
+	//water->draw(shaderProgram, view, projection);
+	rtScene->draw(shaderProgram, view, projection);
 }
 void Scene::drawDragon(GLint shaderProgram)
 {
@@ -44,6 +46,14 @@ void Scene::drawWasp(GLint shaderProgram)
 void Scene::bindNextJoint()
 {
 	currSkel->bindNextJoint();
+}
+void Scene::bindNextCube()
+{
+	rtScene->nextCubeInd();
+}
+void Scene::rotateBoundCube(float deg, glm::vec3 axis)
+{
+	rtScene->rotateBoundCube(deg, axis);
 }
 void Scene::adjustPos(glm::vec3 axis, bool incr)
 {
@@ -62,8 +72,9 @@ void Scene::update()
 /*	waspAnim->update();
 	currSkin->update(); */
 	float currTime = ((float)clock() / CLOCKS_PER_SEC);
-	cloth->update(currTime - prevTime);
-	water->update(currTime - prevTime);
+	/*cloth->update(currTime - prevTime);
+	water->update(currTime - prevTime); */
+	rtScene->update();
 	prevTime = currTime;
 }
 

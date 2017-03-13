@@ -174,6 +174,7 @@ void Window::key_callback(GLFWwindow* window, int key, int scancode, int action,
 		if (key == GLFW_KEY_N)
 		{
 			scene->bindNextJoint();
+			scene->bindNextCube();
 		}
 		if (key == GLFW_KEY_UP)
 		{
@@ -216,14 +217,17 @@ void Window::key_callback(GLFWwindow* window, int key, int scancode, int action,
 		{
 			cout << " Pressed the x " << endl;
 			scene->adjustPos(glm::vec3(1.0f, 0.0f, 0.0f), true);
+			scene->rotateBoundCube(2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		}
 		if (action == GLFW_PRESS && key == GLFW_KEY_Y)
 		{
 			scene->adjustPos(glm::vec3(0.0f, 1.0f, 0.0f), true);
+			scene->rotateBoundCube(2.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		}
 		if (action == GLFW_PRESS && key == GLFW_KEY_Z)
 		{
 			scene->adjustPos(glm::vec3(0.0f, 0.0f, 1.0f), true);
+			scene->rotateBoundCube(2.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 		}
 	}
 	if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
@@ -231,14 +235,18 @@ void Window::key_callback(GLFWwindow* window, int key, int scancode, int action,
 		if (action == GLFW_PRESS && key == GLFW_KEY_X)
 		{
 			scene->adjustPos(glm::vec3(1.0f, 0.0f, 0.0f), false);
+			scene->rotateBoundCube(-2.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+
 		}
 		if (action == GLFW_PRESS && key == GLFW_KEY_Y)
 		{
 			scene->adjustPos(glm::vec3(0.0f, 1.0f, 0.0f), false);
+			scene->rotateBoundCube(-2.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 		}
 		if (action == GLFW_PRESS && key == GLFW_KEY_Z)
 		{
 			scene->adjustPos(glm::vec3(0.0f, 0.0f, 1.0f), false);
+			scene->rotateBoundCube(-2.0f, glm::vec3(0.0f, 0.0f, 1.0f));
 		}
 	}
 	

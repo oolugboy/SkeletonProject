@@ -7,10 +7,10 @@ WaterParticle::WaterParticle(glm::vec3 initPosition, Sphere * sphere, float supp
 	this->prevPosition = this->position = initPosition;
 	this->supportRadius = supportRadius;	
 	cout << " The support radius is " << this->supportRadius << endl;
-	this->smoothingLength = this->supportRadius / 2.0f;
+	this->smoothingLength = this->supportRadius;
 	cout << " The smoothing length is " << smoothingLength << endl;
 	localDensity = pressure = 0.0f;
-	viscosity = 0.5f;
+	viscosity = 0.0005f;
 	debug = false;
 	this->radius = radius;
 }
@@ -28,6 +28,11 @@ void WaterParticle::updateForces()
 }
 void WaterParticle::update(float deltaT)
 {
+	if (debug)
+	{
+		cout << " The force experienced in this frame is";
+		printVector(force);
+	}
 	/* Update the position and velocity */
 	glm::vec3 acceleration = force / mass;
 	//glm::vec3 acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -39,158 +44,85 @@ void WaterParticle::update(float deltaT)
 		cout << position.x << " " << position.y << " " << position.z << endl;
 	}	
 }
-float WaterParticle::kernel(glm::vec3 nPosition, glm::vec3 locPosition)
-{
-	float q = getMag(nPosition - locPosition)/ smoothingLength; 
-	if (debug)
-	{
-		cout << " The smoothing length is " << smoothingLength << endl;
-	}
-	float res = func(q) + (1.0f / pow(smoothingLength, 3.0f));
-	if (debug)
-		cout << " The kernel is returning " << res << endl;
-	return res;
-}
-float WaterParticle::func(float q)
-{
-	if (debug)
-	{
-		cout << " The q passed in is " << q << endl;
-	}
-	
-	float op2 = 0.0f;
-	if (q >= 0 && q < 1)
-	{
-		op2 = (2.0f / 3.0f) - pow(q, 2) + (0.5f * (pow(q, 3)));
-	}
-	else if (q >= 1 && q <= 2)
-	{
-		op2 = (1.0f / 6.0f) * (pow(2 - q, 3));
-	}
-	else
-	{
-		op2 = 0;
-	}
-	float res = (3.0f / (2 * PI)) * op2;
-	if (debug)
-	{
-		cout << " The func is returning " << res << endl;
-	}
-	return res;
-}
+
 void WaterParticle::applyGravity()
 {
 	glm::vec3 gravity = glm::vec3(0.0f, -5.0f, 0.0f);
 	applyForce(gravity);
 }
+void WaterParticle::updatePressure()
+{
+	pressure = stiffConst * (localDensity - restDensity);
+	if (debug)
+	{
+		cout << " The update pressure is " << pressure << endl;		
+	}
+
+}
+glm::vec3 WaterParticle::getSpikyKernelGradient(float q, glm::vec3 posDiff)
+{
+	if (q >= 0 && q <= 1)
+	{
+		glm::vec3 leftOp = (-24.0f  * posDiff)/ (PI * pow(smoothingLength, 8));
+		if (debug)
+		{
+			cout << " The presGrad leftOp";
+			printVector(leftOp);
+		}
+		float rightOp = pow(pow(smoothingLength, 2) - pow(getMag(posDiff), 2), 2);
+		if(debug)
+			cout << " The pressGrad rightOp " << rightOp << endl;
+		if (debug)
+		{
+			cout << " The pressGrad posDiff ";
+			printVector(posDiff);
+		}
+		glm::vec3 res = (leftOp * rightOp);	
+		
+		if (getMag(res) > 0.001f)
+		{
+			if (debug)
+			{
+				cout << " WHAT ARE YOU NOT REDUCING " << endl;
+			}
+			res = glm::normalize(res) * 0.001f;
+		}
+		if (debug)
+		{
+			cout << " The pressure gradient returned is ";
+			printVector(res);
+		}
+		return res;
+	}
+	if (debug)
+	{
+		cout << " I guess the pressure gradient is zero then " << endl;
+	}
+	return glm::vec3(0);
+}
 void WaterParticle::applyPressureForce()
 {
-	updatePressure();
-	/*glm::vec3 pressureGradient = getPressureGradient();
-	if (debug)
-	{
-		cout << " The pressure gradient ";
-		printVector(pressureGradient);
-	}
-	glm::vec3 pressureForce = -1.0f * (mass / localDensity) * pressureGradient;
-	if (debug)
-	{
-		cout << " The pressure force ";
-		printVector(pressureForce);
-	} */
+	updatePressure();	
+
 	glm::vec3 tot = glm::vec3(0.0f, 0.0f, 0.0f);
-	int size = 0;
+	int size = neighbors.size();
 	for (int i = 0; i < size; i++)
 	{
 		float leftOp = (pressure + neighbors[i]->pressure) / (2 * neighbors[i]->localDensity);
+		if(debug)
+			cout << " The pressure leftOp is " << leftOp << endl;
 		float q = getMag(position - neighbors[i]->position) / smoothingLength;
 		tot = tot + (leftOp * getSpikyKernelGradient(q, position - neighbors[i]->position));
 	}
-	applyForce(-1.0f * mass * tot);
-	//applyForce(pressureForce);
-}
-glm::vec3 WaterParticle::getPressureGradient()
-{
-	glm::vec3 tot = glm::vec3(0.0f, 0.0f, 0.0f);
-	int size = neighbors.size();
-	for (int i = 0; i < size; i++)
-	{
-		float leftOp = (pressure / pow(localDensity, 2.0f)) + (neighbors[i]->pressure / pow(neighbors[i]->localDensity, 2));
-		if (debug)
-		{
-			cout << " The loop left hop is " << leftOp << endl;
-			cout << " The pressure is " << pressure << endl;
-		}
-		tot = tot + (leftOp * getKernelGradient(neighbors[i]));
-		if (debug)
-		{
-			cout << " The loop tot is ";
-			printVector(tot);
-		}
-	}
+	glm::vec3 res = (-1.0f * mass * tot);
 	if (debug)
 	{
-		cout << " The tot is ";
-		printVector(tot);
-	}
-	return localDensity * mass * tot;
-}
-glm::vec3 WaterParticle::getKernelGradient(WaterParticle * nBor)
-{
-	float kDiff = kernel(nBor->prevPosition, prevPosition) - kernel(nBor->position, position);
-	float xDiff = (abs(nBor->prevPosition.x - prevPosition.x) - abs(nBor->position.x - position.x));
-	if (debug)
-	{
-		cout << " The kDiff is " << kDiff << endl;
-		cout << " The xDiff is " << xDiff << endl;
-	}
-
-	float yDiff = (abs(nBor->prevPosition.y - prevPosition.y) - abs(nBor->position.y - position.y));
-	float zDiff = (abs(nBor->prevPosition.z - prevPosition.z) - abs(nBor->position.z - position.z));
-
-	if (kDiff == 0)
-	{
-		return glm::vec3(0.0f, 0.0f, 0.0f);
-	}
-	float xVal = kDiff/xDiff, yVal = kDiff/yDiff, zVal = kDiff/zDiff;
-	if (xDiff == 0)
-	{
-		xVal = 0;
-	}
-	if (yDiff == 0)
-	{
-		yVal = 0;
-	}
-	if (zDiff == 0)
-	{
-		zVal = 0;
-	}
-	glm::vec3 res = glm::vec3(xVal, yVal, zVal);
-
-	if (debug)
-	{
-		cout << " The kernel gradient returned is ";
+		cout << " The pressure applied would be ";
 		printVector(res);
 	}
-	return res;
+	applyForce(res);	
 }
-glm::vec3 WaterParticle::getViscosityGradient()
-{
-	int size = neighbors.size();
-	glm::vec3 tot = glm::vec3(0.0f, 0.0f, 0.0f);
-	for (int i = 0; i < size; i++)
-	{
-		glm::vec3 leftOp = (velocity - neighbors[i]->velocity) / neighbors[i]->localDensity;	
 
-		glm::vec3 posDiff = (position - neighbors[i]->position);
-		glm::vec3 rightOpNum = posDiff * getKernelGradient(neighbors[i]);
-		float rightOpDenum = glm::dot(posDiff, posDiff) + (0.01f * pow(smoothingLength, 2));
-		glm::vec3 rightOp = rightOpNum / rightOpDenum;	
-
-		tot = tot + (leftOp * rightOp);
-	}
-	return 2.0f * mass * tot;
-}
 void WaterParticle::applyRepulsion()
 {
 	int collisionType = handleCollision();
@@ -252,21 +184,34 @@ int WaterParticle::handleCollision()
 }
 void WaterParticle::handleImpulse(int collisionType)
 {
-	cout << " ARE WE BEING CALLED " << collisionType << endl;
 	if (collisionType == 1) 
 	{
-		velocity.x = (velocity.x * -0.5f);
+		velocity.x = (velocity.x * -1.0f);
 	}
 	if (collisionType == 2)
 	{
-		cout << " WHAAAATTTT !!!" << endl;
-		velocity.y = (velocity.y * -35.5f);
+		velocity.y = (velocity.y * -1.0f);
 	}
 	if (collisionType == 3)
 	{
-		velocity.z = (velocity.z * -0.5f);
+		velocity.z = (velocity.z * -1.0f);
+	}	
+}
+float WaterParticle::getViscousLagrangian(float q)
+{
+	if (q >= 0 && q <= 1)
+	{
+		float leftOp = 40.0f / (PI * pow(smoothingLength, 4));
+		float res = leftOp * (1 - q);
+		if (debug)
+		{
+			cout << " The non zero lagrangian is " << res << endl;
+		}
+		return res;
 	}
-	//velocity = velocity * 0.5f;
+	if (debug)
+		cout << " I guess returning zero " << endl;
+	return 0.0f;
 }
 void WaterParticle::applyViscosityForce()
 {
@@ -278,8 +223,42 @@ void WaterParticle::applyViscosityForce()
 		glm::vec3 velDiff = neighbors[i]->velocity - velocity;		
 		float q = getMag(position - neighbors[i]->position) / smoothingLength;
 		tot = tot + ((velDiff / neighbors[i]->localDensity) * getViscousLagrangian(q));
+		/*if (debug)
+		{
+			cout << " The neigbors local des"
+		}*/
+	}
+	glm::vec3 res = viscosity * mass * tot;
+	if (debug)
+	{
+		cout << " The viscocity applied would now be ";
+		printVector(res);
 	}
 	applyForce(viscosity * mass * tot);	
+}
+float WaterParticle::kernel(glm::vec3 nPosition, glm::vec3 locPosition)
+{
+	float q = getMag(nPosition - locPosition) / smoothingLength;
+	if (q >= 0 && q <= 1)
+	{
+		float r = getMag(nPosition - locPosition);
+		float leftOp = 4 / (PI * pow(smoothingLength, 8));
+		float rightOp = pow(pow(smoothingLength, 2) - pow(r, 2), 3);
+		float res = leftOp * rightOp;
+		if (debug)
+		{
+			cout << " The kernel gradient is " << res << endl;
+		}
+		return res;
+	}
+	else
+	{
+		if (debug)
+		{
+			cout << " I guess the kernel gradient is zero " << endl;
+		}
+		return 0;
+	}
 }
 void WaterParticle::updateLocalDensity()
 {
@@ -288,8 +267,6 @@ void WaterParticle::updateLocalDensity()
 	for (int i = 0; i < size; i++)
 	{
 		tot += (kernel(neighbors[i]->position, position));
-		if(debug)
-			cout << " The locDensity loop tot is " << tot << endl;
 	}
 	localDensity = mass * tot;
 	if (debug)
@@ -297,21 +274,7 @@ void WaterParticle::updateLocalDensity()
 		cout << " The local density is " << localDensity << endl;
 	}
 }
-void WaterParticle::updatePressure()
-{
-	pressure = stiffConst * (pow(localDensity / restDensity, 7) - 1);
-}
-glm::vec3 WaterParticle::getSpikyKernelGradient(float q, glm::vec3 posDiff)
-{
-	float leftOp = -30.0f / (PI * pow(smoothingLength, 4));
-	float rightOp = pow(1 - q, 2) / q;
-	return leftOp * rightOp * posDiff;
-}
-float WaterParticle::getViscousLagrangian(float q)
-{
-	float leftOp = 40.0f / (PI * pow(smoothingLength, 4));
-	return leftOp * (1 - q);
-}
+
 WaterParticle::~WaterParticle()
 {
 

@@ -145,6 +145,8 @@
     <ClCompile Include="KeyFrame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="Quarternion.cpp" />
+    <ClCompile Include="RotationScene.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skeleton.cpp" />
@@ -171,6 +173,8 @@
     <ClInclude Include="KeyFrame.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="Quarternion.h" />
+    <ClInclude Include="RotationScene.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Skeleton.h" />

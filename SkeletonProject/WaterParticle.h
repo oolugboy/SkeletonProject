@@ -26,7 +26,7 @@ public:
 	float localDensity;
 	float pressure;
 	float viscosity;
-	const float restDensity = 2000.0f;
+	const float restDensity = 0.0f;
 	float supportRadius;
 	float smoothingLength;
 	void updateLocalDensity();
@@ -38,7 +38,7 @@ public:
 	glm::vec3 getSpikyKernelGradient(float q, glm::vec3 posDiff);
 	float getViscousLagrangian(float q);
 	glm::vec3 getKernelGradient(WaterParticle * nBor);
-	const float stiffConst = 3.0f;
+	const float stiffConst = 100.0f;
 	const float springConst = 20.0f;	
 	const float dampFact = 2.0f;
 	vector< WaterParticle *> neighbors;
