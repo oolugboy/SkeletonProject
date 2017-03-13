@@ -15,6 +15,7 @@ public:
 	glm::vec3 normal;
 	virtual void update(float deltaT) = 0;	
 	float getMag(glm::vec3 val);
+	void printVector(glm::vec3 val);
 	void applyForce(glm::vec3 force);
 	void zeroOutForce();	
 	bool debug;

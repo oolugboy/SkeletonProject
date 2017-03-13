@@ -137,8 +137,10 @@
     <ClCompile Include="Cloth.cpp" />
     <ClCompile Include="ClothParticle.cpp" />
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DOF.cpp" />
     <ClCompile Include="Fluid.cpp" />
+    <ClCompile Include="Geode.cpp" />
     <ClCompile Include="Joint.cpp" />
     <ClCompile Include="KeyFrame.cpp" />
     <ClCompile Include="main.cpp" />
@@ -161,8 +163,10 @@
     <ClInclude Include="Cloth.h" />
     <ClInclude Include="ClothParticle.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="DOF.h" />
     <ClInclude Include="Fluid.h" />
+    <ClInclude Include="Geode.h" />
     <ClInclude Include="Joint.h" />
     <ClInclude Include="KeyFrame.h" />
     <ClInclude Include="main.h" />

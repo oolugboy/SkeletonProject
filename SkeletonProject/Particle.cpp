@@ -20,3 +20,7 @@ float Particle::getMag(glm::vec3 val)
 {
 	return sqrt(pow(val.x, 2) + pow(val.y, 2) + pow(val.z, 2));
 }
+void Particle::printVector(glm::vec3 val)
+{
+	cout << val.x << " " << val.y << " " << val.z << endl;
+}

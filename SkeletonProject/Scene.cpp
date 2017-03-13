@@ -8,12 +8,12 @@ Scene::Scene()
 	test = new Skeleton("test.skel");
 	dragon = new Skeleton("dragon.skel");
 
-	currSkel = wasp = new Skeleton("wasp.skel");
-	currSkin = waspSkin = new Skin("wasp.skin", wasp->root);
-	waspAnim = new AnimationClip("wasp_walk.anim", wasp);
+	//currSkel = wasp = new Skeleton("wasp.skel");
+//	currSkin = waspSkin = new Skin("wasp.skin", wasp->root);
+	//waspAnim = new AnimationClip("wasp_walk.anim", wasp);
 
-	tube = new Skeleton("tube.skel");
-	tubeSkin = new Skin("tube.skin", tube->root);
+	currSkel = tube = new Skeleton("tube.skel");
+	currSkin = tubeSkin = new Skin("tube.skin", tube->root);
 
 	cloth = new Cloth(2, 0.0f, 0.0f);
 

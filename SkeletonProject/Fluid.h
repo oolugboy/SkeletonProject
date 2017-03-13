@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "WaterParticle.h"
+#include "Cube.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/mat4x4.hpp>
@@ -18,6 +19,7 @@ public:
 	void initParticles();
 	void draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection);
 	Sphere * genSphere;
+	Cube * boundCube;
 	float supportRadius;
 	float smoothingRadius;
 	float radius;
@@ -25,6 +27,7 @@ public:
 	void zeroOutForces();
 	void clearNeighbors();
 	void updateLocalDensities();
+	void updateParticleForces();
 	Fluid();
 	~Fluid();
 };

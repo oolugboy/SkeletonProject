@@ -7,8 +7,7 @@ Sphere::Sphere(float radius)
 	/* Set the number of longitudes and latitudes */
 	latNum = 30;
 	longNum = 30;
-	toWorld = glm::mat4(1.0f);
-
+	
 	/* Do not use the radius yet */
 	m_radius = radius;	
 

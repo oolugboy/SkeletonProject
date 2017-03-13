@@ -3,13 +3,15 @@
 
 Fluid::Fluid()
 {
-	numParticles = 16;
-	radius = 0.1f;
+	numParticles = 8;
+	radius = 0.05f;
 
 	genSphere = new Sphere(radius);	
+	boundCube = new Cube();
+	supportRadius = 4.0f * radius;
 	initParticles();
+	cout << " What the heck!!!! " << supportRadius << endl;
 	
-	supportRadius = 4 * radius;
 }
 void Fluid::update(float deltaT)
 {	
@@ -17,10 +19,14 @@ void Fluid::update(float deltaT)
 	clearNeighbors();
 	updateNeighbors();
 	updateLocalDensities();
+	updateParticleForces();
 	updateParticles(deltaT);
 }
 void Fluid::draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 {	
+	/* First draw the cubes */
+	boundCube->draw(shaderProgram, view, projection);
+	/* Then draw the particles */
 	for (int i = 0; i < numParticles; i++)
 	{
 		particles[i]->draw(shaderProgram, view, projection);
@@ -30,8 +36,7 @@ void Fluid::zeroOutForces()
 {
 	for (int i = 0; i < numParticles; i++)
 	{
-		particles[i]->zeroOutForce();
-		particles[i]->visited = false;
+		particles[i]->zeroOutForce();		
 	}
 }
 void Fluid::clearNeighbors()
@@ -63,6 +68,13 @@ void Fluid::updateLocalDensities()
 		particles[i]->updateLocalDensity();
 	}
 }
+void Fluid::updateParticleForces()
+{
+	for (int i = 0; i < numParticles; i++)
+	{
+		particles[i]->updateForces();
+	}
+}
 void Fluid::updateParticles(float deltaT)
 {
 	for (int i = 0; i < numParticles; i++)
@@ -73,21 +85,27 @@ void Fluid::updateParticles(float deltaT)
 void Fluid::initParticles()
 {	
 	int index = 0;
-	float gridSize = sqrt(numParticles);
+	float gridSize = cbrtf(numParticles);
 	float diff = 4 * radius;
-	float y = 2.0f, z = -1.0f;
+	float y = 1.0f, z = -1.0f;
 	for (int i = 0; i < gridSize; i++)
 	{
-		float x = -1.0f;
+		float z = -1.0f;
 		for (int j = 0; j < gridSize; j++)
 		{
-			WaterParticle * newPart = new WaterParticle(glm::vec3(x, y, z), genSphere, supportRadius);
-			newPart->index = index++;
-			particles.push_back(newPart);
-			x += diff;
+			float x = -1.0f;
+			for (int k = 0; k < gridSize; k++)
+			{
+				WaterParticle * newPart = new WaterParticle(glm::vec3(x, y, z), genSphere, supportRadius, radius);			
+				newPart->index = index++;
+				particles.push_back(newPart);
+				x += diff;
+			}
+			z += diff;
 		}
-		z += diff;
+		y -= diff;
 	}
+	particles[0]->debug = true;
 }
 float Fluid::getMag(glm::vec3 val)
 {
