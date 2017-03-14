@@ -23,9 +23,14 @@ public:
 	void nextCubeInd();
 	void rotateBoundCube(float deg, glm::vec3 axis);
 	void printVector(glm::vec4 val);
-	void update();
+	void update(bool slerp, float t, bool catMull);
+	glm::vec4 slerp(glm::vec4 orientation1, glm::vec4 orientation2, float t);
+	glm::vec4 catMull(glm::vec4 ori1, glm::vec4 ori2, glm::vec4 ori3, glm::vec4 ori4, float t);
+	void handleCatMull(float t);
 	void resetSlerpCube();
 	void slerpCube(float t);
+	void getSlerpInterval(int & startInd, int & endInd, float t);
+	void shortenDistance();
 	void draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection);
 	~RotationScene();
 };

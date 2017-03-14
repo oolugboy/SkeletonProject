@@ -8,8 +8,7 @@ Quarternion::Quarternion()
 	matrixOrientation = glm::mat4(1.0f);
 }
 void Quarternion::rotate(float deg, glm::vec3 axis)
-{
-	cout << " rotating " << endl;
+{	
 	float rad = deg * (PI / 180.0f);
 	glm::vec4 rotOrientation = glm::vec4(cos(rad / 2.0f), axis.x * sin(rad / 2.0f), axis.y * sin(rad / 2.0f), axis.z * sin(rad / 2.0f));
 	orientation = multiply(rotOrientation, orientation);
@@ -33,7 +32,7 @@ glm::vec4 Quarternion::multiply(glm::vec4 orientation1, glm::vec4 orientation2)
 }
 float Quarternion::dot(Quarternion * other)
 {
-
+	return glm::dot(orientation, other->orientation);
 }
 float Quarternion::getMag(glm::vec4 val)
 {

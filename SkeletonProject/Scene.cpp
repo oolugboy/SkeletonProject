@@ -2,7 +2,10 @@
 
 using namespace std;
 
-
+float initTime = 0.0f;
+bool interpSet = false;
+bool gInterp = false;
+bool catMull = false;
 Scene::Scene()
 {
 	test = new Skeleton("test.skel");
@@ -67,14 +70,39 @@ void Scene::moveCloth(glm::vec3 diff)
 {
 	cloth->moveFixedParticles(diff);
 }
+void Scene::startInterpState(bool cMull)
+{
+	initTime = ((float)clock() / CLOCKS_PER_SEC);
+	interpSet = true;
+	catMull = cMull;
+}
+float Scene::getInterpState(bool & interp)
+{
+	float currTime = ((float)clock() / CLOCKS_PER_SEC);	
+	if((currTime - initTime) <= 4.2f && interpSet)
+	{
+		interp = true;
+		if ((currTime - initTime) <= 4.0f)
+			return (currTime - initTime);
+		else
+			return 4.0f;
+	}
+	else
+	{
+		interp = false;
+		interpSet = false;
+		return -1;
+	}
+}
 void Scene::update()
 {
 /*	waspAnim->update();
 	currSkin->update(); */
 	float currTime = ((float)clock() / CLOCKS_PER_SEC);
-	/*cloth->update(currTime - prevTime);
-	water->update(currTime - prevTime); */
-	rtScene->update();
+	/*cloth->update(currTime - prevTime); */
+	//water->update(currTime - prevTime);
+	float t = getInterpState(gInterp);
+	rtScene->update(gInterp, t, catMull);
 	prevTime = currTime;
 }
 

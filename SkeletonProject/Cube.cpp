@@ -52,7 +52,7 @@ void Cube::draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 	glBindVertexArray(VAO);	
 
 	glEnable(GL_DEPTH_TEST);
-//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	// Tell OpenGL to draw with triangles, using 36 indices, the type of the indices, and the offset to start from
 	glDrawArrays(GL_TRIANGLES, 0, vertNum);

@@ -3,7 +3,7 @@
 
 Fluid::Fluid()
 {
-	numParticles = 1000;
+	numParticles = 8;
 	radius = 0.05f;
 
 	genSphere = new Sphere(radius);	

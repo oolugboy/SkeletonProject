@@ -124,7 +124,7 @@ void Window::display_callback(GLFWwindow* window)
 	//Update the view matrix
 	V = glm::lookAt(cam_pos, cam_look_at, cam_up);
 	//Make the scene initially red 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	// Clear the color and depth buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -191,6 +191,14 @@ void Window::key_callback(GLFWwindow* window, int key, int scancode, int action,
 		if (key == GLFW_KEY_RIGHT)
 		{
 			scene->moveCloth(glm::vec3(0.5f, 0.0f, 0.0f));
+		}
+		if (key == GLFW_KEY_L)
+		{
+			scene->startInterpState(false);
+		}
+		if (key == GLFW_KEY_C)
+		{
+			scene->startInterpState(true);
 		}
 	}
 

@@ -26,7 +26,7 @@ public:
 	float localDensity;
 	float pressure;
 	float viscosity;
-	const float restDensity = 0.0f;
+	const float restDensity = 1000.0f;
 	float supportRadius;
 	float smoothingLength;
 	void updateLocalDensity();
