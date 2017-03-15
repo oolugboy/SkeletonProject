@@ -1,10 +1,13 @@
 #include "Cube.h"
 
-Cube::Cube()
+Cube::Cube(bool wired, glm::vec3 position)
 {
 	// Create array object and buffers. Remember to delete your buffers when the object is destroyed!
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	this->wired = wired;
+	this->toWorld = glm::translate(glm::mat4(1.0f), position);
+	this->position = position;
 	loadVertices();
 }
 void Cube::loadVertices()
@@ -52,7 +55,8 @@ void Cube::draw(GLint shaderProgram, glm::mat4 view, glm::mat4 projection)
 	glBindVertexArray(VAO);	
 
 	glEnable(GL_DEPTH_TEST);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	if(wired)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	// Tell OpenGL to draw with triangles, using 36 indices, the type of the indices, and the offset to start from
 	glDrawArrays(GL_TRIANGLES, 0, vertNum);

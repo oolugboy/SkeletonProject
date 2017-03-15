@@ -7,7 +7,7 @@ Fluid::Fluid()
 	radius = 0.05f;
 
 	genSphere = new Sphere(radius);	
-	boundCube = new Cube();
+	boundCube = new Cube(true, glm::vec3(0.0f, 0.0f, 0.0f));
 	supportRadius = 4.0f * radius;
 	initParticles();
 	cout << " What the heck!!!! " << supportRadius << endl;

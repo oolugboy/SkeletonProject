@@ -8,7 +8,7 @@
 class Cube: public Geode
 {
 public:
-	Cube();
+	Cube(bool wired, glm::vec3 position);
 	void loadVertices();
 	GLuint vertNum = 36;
 	const glm::vec3 vertices[36] = {
